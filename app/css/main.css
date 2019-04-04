@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+main{
+    font-family: 'PT Sans', sans-serif;
+}
+
+main div.main{
+	background-image: url(images/ludi12.jpg);
+	background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+	text-align: center;
+}
+
+.about{
+	background: #4a8ee3;
+	opacity: 0.8;
+}
+
+#text_about{
+	color: black;
+    background: white;
+    font-family: 'PT Sans', sans-serif;
+    font-size: 20px;
+}
+
+.datasets_info{
+	background-image: url(images/data_centers.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+	background-size: cover;
+	font-family: 'PT Sans', sans-serif;
+	color: black;
+	font-size: 23px;
+}
+
+.technologies{
+	background: white;
+	font-family: 'PT Sans', sans-serif;
+	text-align: center;
+}
+
+.technologies a{
+	transition: all 1s;
+}
+
+
+.technologies a:hover{
+	-webkit-transform: scale(1.2);
+	transform: scale(1.2);
+}
+
+@media (max-width: 450px){
+	.datasets_info{
+		font-size: 16px;
+	}
+
+	#text_about{
+		font-size: 16px;
+	}
+    
+}

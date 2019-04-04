@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
+
+.navbar-nav > .nav-item.active > .nav-link{
+	border-bottom: 1.5px solid white;
+}
+
+.nav_brands > .nav-item > .nav-link{
+	padding: 0 40px;
+}
+
+.nav_icons > .nav-item > .nav-link{
+	padding: 0 10px;
+}
+
+.navbar-nav li{
+	padding: 0 50px;
+	font-size: 18px;
+	font-family: 'PT Sans', sans-serif; 
+}
+
+ul.navbar-nav li.nav-item a.nav-link{
+	color: white !important;
+}
+
+.navbar-nav > .nav-item > .nav-link:hover{
+	border-bottom: 1.5px solid white;
+}
+
+.part{ 
+	background-color: white;
+	font-family: 'PT Sans', sans-serif;
+}
+
+footer{
+	color: #fff;
+	font-family: 'PT Sans', sans-serif;
+}
+
+footer div.block_1{
+	background-color: #4a8ee3;
+	opacity: 0.8;
+}
+
+footer div.block_1 a.nav-link{
+	color: white;
+	float:right;
+	font-size: 15px;
+}
+
+footer div.block_2{
+	background-color: #4a8ee3;
+	text-align: center;
+}
+
+main div.support_page{
+	background-color: #fff;
+	min-height: 100vh;
+	max-height: 850px;
+}
+
+main div.registration{
+	min-height: 100vh;
+	background: url("images/ludi12.jpg");
+	background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+main div.recovery_password{
+	min-height: 100vh;
+	background: url("images/ludi12.jpg");
+	background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+main div.success_registr{
+	background: url("images/ludi12.jpg");
+	background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    -webkit-background-size: cover;
+	text-align: center;
+}
+
+@media (max-width: 450px){
+
+	main div.registration{
+		min-height: 850px;
+	}
+}

@@ -1,0 +1,46 @@
+<div class="registration">
+         	<div class="container">
+         		<div class="row py-lg-5 justify-content-lg-around" id="registr" ng-hide="message">
+         			<div class="col-lg-5 order-2 order-lg-1">
+         				<form role="form" class="px-3 py-1 px-lg-3 py-lg-3" id="form" style="background-color: #fff;" novalidate>
+         					<div class="form-group">
+    							<label for="Username">Имя пользователя</label>
+    							<input type="text" class="form-control" id="Username" ng-model="username" placeholder="Введите имя пользователя" required>
+  							</div>
+  							<div class="form-group">
+    							<label for="Email">Адрес электронной почты</label>
+    							<input type="email" class="form-control" id="Email" ng-model="email" placeholder="Введите адрес электронной почты" required>
+  							</div>
+  							<div class="form-group">
+    							<label for="Date">Дата рождения</label>
+    							<input type="date" class="form-control" id="Date" ng-model="date" placeholder="Введите дату рождения" required>
+  							</div>
+  							<div class="form-group">
+  								<h6>Фотография</h6>
+  								<div class="custom-file">
+    								<input type="file" class="custom-file-input" id="Photo" accept="image/jpeg,image/png" onchange="angular.element(this).scope().readURL(this)">
+    								<label class="custom-file-label" for="Photo">Выберите фотографию</label>
+  								</div>
+  							</div>
+  							<div class="form-group">
+    							<label for="Password">Пароль</label>
+    							<input type="password" class="form-control" id="Password" ng-model="password" placeholder="Введите пароль" required>
+  							</div>
+  							<div class="form-group d-flex justify-content-center">
+  								<button ng-click="registr($event)" class="btn btn-primary">Зарегистрироваться</button>
+  							</div>
+         				</form>
+         			</div>
+         			<div class="col-lg-6 order-1 order-lg-2 py-3 py-lg-0">
+         				<h2>Регистрация нового пользователя</h2>
+         				<p>Для использования функционала веб-сервиса для разпознавания возраста, возрастной группы и пола человека на изображении необходимо зарегистрироваться. Для этого укажите необходимые данные в форме для регистрации нового пользователя и нажмите кнопку "Зарегистрироваться"</p>
+         			</div>
+         		</div>
+            <div class="row justify-content-center justify-content-lg-center align-items-center align-items-lg-center" id="message" style="height: 100vh; text-align: center;" ng-show="message">
+              <div class="col-11 col-lg-5 py-2 py-lg-3 message" style="background-color: #fff;">
+                <h3>Регистрация прошла успешно</h3>
+                <a style="text-decoration: none;" href="/autorization">Вернуться на страницу авторизации</a>
+              </div>
+            </div>
+         	</div>
+         </div>

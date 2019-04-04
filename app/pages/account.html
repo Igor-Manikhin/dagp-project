@@ -1,0 +1,82 @@
+<div class="account">
+			<div class="container-custom">
+				<div class="row justify-content-center justify-content-lg-around align-items-lg-start my-5 my-lg-1 pt-lg-5" style="height: 100vh;">
+					<div class="col-md-5 col-lg-3">
+						<ul class="nav d-flex flex-column py-3 py-lg-4 nav-acc" style="background-color: #4a8ee3;" ng-init="link = 1">
+  							<li class="nav-item" ng-click="link = 1">
+    							<a class="nav-link" href="#">Профиль</a>
+  							</li>
+  							<li class="nav-item" ng-click="link = 2">
+    							<a class="nav-link" href="#">История распознаваний</a>
+  							</li>
+  							<li class="nav-item" ng-click="link = 3">
+    							<a class="nav-link" href="#">Изменить данные профиля</a>
+  							</li>
+  							<li class="nav-item">
+    							<a class="nav-link" href="/logout">Выйти из аккаунта</a>
+  							</li>
+						</ul>
+					</div>
+					<div class="col-11 col-lg-8 ml-lg-5" ng-if="link == 1">
+						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start">
+							<h5>Профиль пользователя</h5>
+						</div>
+						<div class="row justify-content-center justify-content-lg-around py-lg-3 pt-2" style="background-color: #e6e6e6;">
+							<div class="d-flex flex-column col-10 col-lg-4 mr-lg-3">
+								<div class="card px-lg-2 pt-2">
+  									<img class="card-img-top" ng-src="{{photoURL}}" alt="Card image cap" width="250" height="250">
+  									<div class="card-body">
+										<a class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal" style="color: #fff;">Редактировать</a>
+  									</div>
+								</div>
+								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								  <div class="modal-dialog" role="document">
+								    <div class="modal-content">
+								      <div class="modal-header">
+								        <h5 class="modal-title" id="exampleModalLabel">Загрузка нового изображения</h5>
+								        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								          <span aria-hidden="true">&times;</span>
+								        </button>
+								      </div>
+								      <div class="modal-body">
+								        Выберите новое изображение для загрузки в профиль вашего аккаунта.
+								        <br>
+								        Вы можете загружать изображения формата JPG или PNG.
+								      </div>
+								      <div class="modal-footer justify-content-center justify-content-lg-center">
+								        <div class="file btn btn-sm btn-primary">
+											Выбрать изображение 
+											<input type="file" name="file" accept="image/jpeg,image/png" onchange="angular.element(this).scope().readURL(this)"/>
+										</div>
+								      </div>
+								    </div>
+								  </div>
+								</div>
+							</div>
+							<div class="col-10 col-lg-6 my-2">
+								<ul class="list-group list-group-flush">
+									<li class="list-group-item">Имя пользователя: {{username}}</li>
+									<li class="list-group-item">
+										<span>Город: </span><br>
+										<span>Email: {{Email}}</span><br>
+										<span>Дата рождения: </span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="col-11 col-lg-8 ml-lg-5" ng-if="link == 2">
+						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
+							<h5>История распознаваний</h5>
+						</div>
+						<div class="row py-lg-3">
+							<div class="col-12 col-lg-12" style="height: 300px;">
+								
+							</div>
+						</div>
+					</div>
+					<div class="col-6 col-lg-8 ml-lg-5" ng-if="link == 3">
+						<h1>Круто!!</h1>
+					</div>
+				</div>
+		</div>

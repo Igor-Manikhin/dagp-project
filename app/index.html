@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>DAGP</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="shortcut icon" href="css/images/Логотип.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="bootstrap-4.2.1-dist/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/determination.css">
+	<link rel="stylesheet" type="text/css" href="css/account.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+	<script src="js/lib/angular.js"></script>
+	<script src="js/lib/angular-route.js"></script>
+	<script src="js/lib/angular-cookies.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script text="javascript" src="bootstrap-4.2.1-dist/js/bootstrap.js"></script>
+	<script src="js/lib/date.format.js"></script>
+	<script type="text/javascript" src="js/route.js"></script>
+	<script type="text/javascript" src="js/controllers.js"></script>
+	<script type="text/javascript" src="js/lib/tracking/tracking-min.js"></script>
+	<script type="text/javascript" src="js/lib/tracking/data/face-min.js"></script>
+	<base href="/">
+</head>
+<body ng-app="myApp">
+	<header class="sticky-top">
+	   <nav class="navbar navbar-dark navbar-expand-lg" style="background-color: #4a8ee3;" ng-controller="SidebarController">
+		   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#List" aria-controls="List" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+           </button>
+		   <a class="navbar-brand py-0 mr-0" href="/">
+			       <img src="css\images\Логотип.png" alt="Logo" style="width: 75px; height:75px;">
+		   </a>
+		   <div class="collapse navbar-collapse justify-content-center" id="List">
+		       <ul class="navbar-nav">
+			       <li ng-class="{'active': isActive('/')}" class="nav-item">
+				      <a class="nav-link" href="/">Главная</a>
+			       </li>
+			       <li ng-class="{'active': isActive('/determination')}" class="nav-item">
+				      <a class="nav-link" href="/determination">Определение возраста и пола</a>
+			       </li>
+			       <li class="nav-item">
+				      <a class="nav-link" ng-click="about()" href="#about">О сайте</a>
+			       </li>
+			       <li id="autoriz" ng-class="{'active': isActive('/autorization')}" class="nav-item">
+				      <a class="nav-link" href="/autorization">Войти в личный аккаунт</a>
+			       </li>
+			       <li id="account" ng-class="{'active': isActive('/account')}" class="nav-item" style="display: none;">
+				      <a class="nav-link" href="/account">Просмотр аккаунта</a>
+			       </li>
+		       </ul>
+	        </div>
+	    </nav>
+	</header>
+	<main ng-view>
+	</main>
+	<footer>
+		<div class="block_1">
+			<div class="container-fluid">
+			  <div class="row py-3 align-items-center">
+			  	<div class="col-7 col-lg-6">
+			  		<ul class="nav nav_icons">
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+							<i class="fab fa-vk fa-2x"></i>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+							<i class="fab fa-telegram fa-2x"></i>
+						</a>					
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+							<i class="fab fa-google fa-2x"></i>
+						</a>	
+					</li>
+				  </ul>
+			  	</div>
+			  	<div class="col-5 col-lg-6">
+			  		<a href="/support" class="nav-link">Тех.поддержка</a>
+			  	</div>
+			  </div>	  	
+			</div>
+		  </div>
+		  <div class="block_2">
+		  	<div class="container-fluid">
+		  		<div class="row py-2 align-items-lg-center">
+		  			<div class="col-lg-12">
+		  				<span>© 2018-2019 Все права защищены, DAGP</span>
+		  			</div>
+		  		</div>
+		  	</div>
+		  </div>
+	</footer>
+</body>
+</html>

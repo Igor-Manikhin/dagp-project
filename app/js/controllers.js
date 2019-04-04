@@ -209,7 +209,7 @@ myApp.controller("profileController", function($scope, $http, user){
 myApp.controller("showHisrotyController", function($scope, $http, user){
     $http.get("http://localhost:3000/getHistoryUser/"+user.getIdCurrentUser()).then(function(result){
         if(result.data.length > 0){
-            $scope.history = result.data;
+            $scope.history = result.data.slice().reverse();
             $scope.history_determ = true;
         };
     });

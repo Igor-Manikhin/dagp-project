@@ -88,6 +88,24 @@ app.get('/getUserInfo/:id', function(req, res){
  	 })
 });
 
+app.get('/getHistoryUser/:id', function(req, res){
+	var token = req.params.id;
+	var decoded = jwt.verify(token, publicKey);
+
+	pool.connect(function(err, client, done){
+		if(err){
+			return console.log("Error!");
+		}
+		client.query("SELECT * FROM history_determ WHERE user_id = $1", [decoded.id], function(err, result){
+			if(err){
+				return console.log("Bad request!");
+			}
+			done();
+			res.send(result.rows);
+		});
+	});
+})
+
 app.get('/*', function(req, res){
  	 res.sendFile('/app/index.html', { root: __dirname }); 
 });
@@ -142,7 +160,7 @@ app.post("/autorization", function(req, res) {
 				}
 				done();
 				if(result.rows.length > 0){
-					var token = jwt.sign({ id: result.rows[0].id }, privateKey, {algorithm: 'RS256'});
+					var token = jwt.sign({ id: result.rows[0].id, username: result.rows[0].username }, privateKey, {algorithm: 'RS256'});
 					json = {
 						loggedIn: true,
 						token: token,
@@ -155,15 +173,22 @@ app.post("/autorization", function(req, res) {
 
 app.post("/saveDataHistory", function(req, res){
 	var body = req.body;
+	var file_path = body.path;
 	var token = body.id;
 
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err){
 			return console.log("Token is not verifyed!");
 		}
+		
+		var reqExp = new RegExp("^data:" + body.type_file + ";base64,");
+		var base64Data = body.photoURL.replace(reqExp, "");
+		file_path = "media/" + decoded.username + "/determ_history/" + body.name_file;
+		file.writeFileSync(file_path, base64Data, 'base64');
+
 		pool.connect(function(err, client, done){
-			client.query("INSERT INTO history_determ (user_id, age_determ, age_group_determ, gender_determ) VALUES ($1, $2, $3, $4)", 
-				[decoded.id, body.age_determ, body.age_group_determ, body.gender_determ], function(err, result){
+			client.query("INSERT INTO history_determ (user_id, age_determ, age_group_determ, gender_determ, photo_used_determ) VALUES ($1, $2, $3, $4, $5)", 
+				[decoded.id, body.age_determ, body.age_group_determ, body.gender_determ, file_path], function(err, result){
 					if(err){
 						return console.log("Bad request!");
 					}

@@ -17,7 +17,7 @@
   							</li>
 						</ul>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="link == 1">
+					<div class="col-11 col-lg-8 ml-lg-5" ng-controller="profileController" ng-if="link == 1">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start">
 							<h5>Профиль пользователя</h5>
 						</div>
@@ -65,18 +65,49 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="link == 2">
+					<div class="col-11 col-lg-8 ml-lg-5" ng-controller="showHisrotyController" ng-if="link == 2">
 						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
 							<h5>История распознаваний</h5>
 						</div>
 						<div class="row py-lg-3">
-							<div class="col-12 col-lg-12" style="height: 300px;">
-								
+							<div class="d-flex col-12 col-lg-12 justify-content-lg-center align-items-lg-center" ng-hide="history_determ" style="background-color: #e6e6e6; height: 350px;">
+								<h4>История распознаваний пустая</h4>
+							</div>
+							<div class="col-12 col-lg-12" ng-show="history_determ" style="height: 350px; overflow-y: scroll;">
+								<table class="table table-hover">
+									<thead style="text-align: center;">
+										<tr>
+											<th>#</th>
+											<th>Результаты распознавания</th>
+											<th>Фотография</th>
+										</tr>
+									</thead>
+									<tbody ng-repeat="history_id in history">
+										<tr>
+										   <th style="text-align: center;">{{$index + 1}}</th>
+										   <td>
+										   	 <div class="d-flex justify-content-lg-center">
+										   	 	Возраст: {{history_id.age_determ}} лет<br>
+										   	  	Пол: {{history_id.gender_determ}}<br>
+										   	  	Возрастная группа: {{history_id.age_group_determ}}
+										   	 </div>
+										   </td>
+										   <td>
+										   	 <div class="d-flex justify-content-lg-center">
+										   	 	<img ng-src="{{history_id.photo_used_determ}}" alt="" width="150" height="150">
+										   	 </div>
+										   </td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
-					<div class="col-6 col-lg-8 ml-lg-5" ng-if="link == 3">
-						<h1>Круто!!</h1>
+					<div class="col-11 col-lg-8 ml-lg-5" ng-if="link == 3">
+						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
+							<h5>Изменение данных профиля</h5>
+						</div>
+						<div class="row py-lg-3"></div>
 					</div>
 				</div>
 		</div>

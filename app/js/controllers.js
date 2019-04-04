@@ -173,7 +173,7 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
     }
 });
 
-myApp.controller("accountController", function($scope, $http, user){
+myApp.controller("profileController", function($scope, $http, user){
 
    $scope.readURL = function(input) {
         if (input.files && input.files[0]) {
@@ -206,6 +206,15 @@ myApp.controller("accountController", function($scope, $http, user){
 
 });
 
+myApp.controller("showHisrotyController", function($scope, $http, user){
+    $http.get("http://localhost:3000/getHistoryUser/"+user.getIdCurrentUser()).then(function(result){
+        if(result.data.length > 0){
+            $scope.history = result.data;
+            $scope.history_determ = true;
+        };
+    });
+});
+
 myApp.controller("supportController", function($scope, $http){
 
     $scope.sendSupport = function(event){
@@ -234,6 +243,10 @@ myApp.controller("supportController", function($scope, $http){
 myApp.controller("determinationController", function($scope, $timeout, $http, user){
 
     var spinner = angular.element(document.querySelector(".loading"));
+    var photoURL;
+    var type_file;
+    var name_file;
+
     let model;
     (async function(){
             model = await tf.loadLayersModel('backend/neural_network/model.json');
@@ -245,6 +258,9 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
             var reader = new FileReader();
             reader.onload = function (e) {
                 $('#selected-image').attr('src', e.target.result);
+                photoURL = e.target.result;
+                type_file = input.files[0].type;
+                name_file = input.files[0].name;
             }
             
             reader.readAsDataURL(input.files[0]);
@@ -307,6 +323,9 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
                 res_determ.age_determ = 18;
                 res_determ.age_group_determ = age_group;
                 res_determ.gender_determ = prediction;
+                res_determ.photoURL = photoURL;
+                res_determ.type_file = type_file;
+                res_determ.name_file = name_file;
 
                 $http.post("http://localhost:3000/saveDataHistory", res_determ);
             }

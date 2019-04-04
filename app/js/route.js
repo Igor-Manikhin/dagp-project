@@ -29,8 +29,7 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
                         }
                     },
         },
-        templateUrl: "../pages/account.html",
-        controller: "accountController"
+        templateUrl: "../pages/account.html"
     })
 
     .when('/autorization', {

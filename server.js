@@ -24,6 +24,9 @@ var config = {
 
 var pool = new pg.Pool(config);
 
+//Скрываем информацию об ПО, на котором был написан сервер
+app.disable('x-powered-by');
+
 app.use('/media', express.static(__dirname + "/media"));
 app.use(express.static(__dirname + "/app"));
 app.use(bodyParser.json({limit: "100mb", type:'application/json'}));
@@ -105,10 +108,6 @@ app.get('/getHistoryUser/:id', function(req, res){
 		});
 	});
 })
-
-app.get('/*', function(req, res){
- 	 res.sendFile('/app/index.html', { root: __dirname }); 
-});
 
 app.post("/registration", function(req, res){	
 	var body = req.body;
@@ -250,6 +249,12 @@ app.post("/support", function(req, res){
 			})
 	})
 });
+
+
+app.use('/*', function(req, res){
+ 	 res.sendFile('/app/index.html', { root: __dirname }); 
+});
+
 
 // Start Server
 app.listen(port, function () {

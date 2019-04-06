@@ -250,11 +250,9 @@ app.post("/support", function(req, res){
 	})
 });
 
-
-app.use('/*', function(req, res){
+app.use(function(req, res){
  	 res.sendFile('/app/index.html', { root: __dirname }); 
 });
-
 
 // Start Server
 app.listen(port, function () {

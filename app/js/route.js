@@ -20,7 +20,7 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
         controller: "determinationController"
     })
 
-    .when('/account', {
+    .when('/account/:id', {
         resolve: {
             check:  function($location, user){
                         if(!user.isUserLoggedIn()){
@@ -29,8 +29,10 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
                         }
                     },
         },
-        templateUrl: "../pages/account.html"
+        templateUrl: "../pages/account.html",
+        controller: "accountController"
     })
+
 
     .when('/autorization', {
     	templateUrl: "../pages/autoriz.html",

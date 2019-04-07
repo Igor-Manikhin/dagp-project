@@ -173,6 +173,19 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
     }
 });
 
+myApp.controller("accountController", function($scope, $routeParams){
+    
+    var links = ['profile', 'history-determ', 'change-data'];
+
+    for(var i = 0; i < links.length; i++){
+        if($routeParams.id == links[i]){
+            $scope.nav_account = {page: i + 1};
+        }
+    };
+
+});
+
+
 myApp.controller("profileController", function($scope, $http, user){
 
    $scope.readURL = function(input) {

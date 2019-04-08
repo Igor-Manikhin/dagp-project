@@ -374,10 +374,10 @@ myApp.run(function($http, $location, user){
 
                 if(user.showCheck() == false){
                     var paths = result.data.links;
-
+                    user.clearData();
+                    
                     for(var i = 0; i < paths.length; i++){
                         if(path == paths[i]){
-                            user.clearData();
                             $location.path("/autorization");
                         }
                     }

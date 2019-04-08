@@ -35,7 +35,7 @@ app.use(bodyParser.urlencoded({limit: "100mb", extended: true, type:'application
 
 app.get('/check/:id', function(req, res){
 	 var token = req.params.id;
-	 var links =["/account/profile", "/account/history-determ", "/account/change-data","/determination"];
+	 var links =["/account/profile", "/account/history-determ", "/account/change-data", "/determination"];
 	 var response_body = {};
 
 	 jwt.verify(token, publicKey, function(err, decoded) {

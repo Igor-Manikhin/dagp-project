@@ -3,7 +3,7 @@ myApp.service('user', function(){
        
     var loggedIn = false;
     var check;
-    var currentURL = "/account";
+    var currentURL = "/account/profile";
 
     this.isUserLoggedIn = function(){
         
@@ -365,12 +365,13 @@ myApp.controller('SidebarController', function($scope, $location) {
 myApp.run(function($http, $location, user){
     if(localStorage.getItem("login")){
             $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
-                var paths = ["/account", "/determination"];
-                user.check(result.data);
+                user.check(result.data.answer);
                 path = $location.path();
 
                 if(user.showCheck() == false){
+                    var paths = result.data.links;
                     user.clearData();
+
                     for(var i = 0; i < paths.length; i++){
                         if(path == paths[i]){
                             $location.path("/autorization");

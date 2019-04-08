@@ -35,10 +35,15 @@ app.use(bodyParser.urlencoded({limit: "100mb", extended: true, type:'application
 
 app.get('/check/:id', function(req, res){
 	 var token = req.params.id;
+	 var links =["/account/profile", "/account/history-determ", "/account/change-data","/determination"];
+	 var response_body = {};
 
 	 jwt.verify(token, publicKey, function(err, decoded) {
   		if(err){
-  			res.send(false);
+  			response_body.answer = false;
+  			response_body.links = links;
+  			res.send(response_body);
+  			
   			return console.log("Token is not verifyed!")
   		}
   	  	pool.connect(function(err, client, done){
@@ -51,10 +56,12 @@ app.get('/check/:id', function(req, res){
  	 			}
  	 			done();
  	 			if(result.rows.length > 0){
- 	 				res.send(true);
+ 	 				response_body.answer = true;
+ 	 				res.send(response_body);
  	 			}
  	 			else{
- 	 				res.send(false);
+ 	 				response_body.answer = false;
+ 	 				res.send(response_body);
  	 			}	
  	 		})
  	 	})

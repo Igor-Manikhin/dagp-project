@@ -46,25 +46,8 @@ app.get('/check/:id', function(req, res){
   			
   			return console.log("Token is not verifyed!")
   		}
-  	  	pool.connect(function(err, client, done){
- 	 		if(err){
- 	 			return console.log("Error!");
- 	 		}
- 	 		client.query("SELECT * FROM users WHERE id = $1;", [decoded.id], function(err, result){
- 	 			if(err){
- 	 				return console.log("Bad request!");
- 	 			}
- 	 			done();
- 	 			if(result.rows.length > 0){
- 	 				response_body.answer = true;
- 	 				res.send(response_body);
- 	 			}
- 	 			else{
- 	 				response_body.answer = false;
- 	 				res.send(response_body);
- 	 			}	
- 	 		})
- 	 	})
+  		response_body.answer = true;
+  		res.send(response_body);
 	 })
 });
 

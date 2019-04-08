@@ -173,20 +173,9 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
     }
 });
 
-myApp.controller("accountController", function($scope, $routeParams){
-    
-    var links = ['profile', 'history-determ', 'change-data'];
-
-    for(var i = 0; i < links.length; i++){
-        if($routeParams.id == links[i]){
-            $scope.nav_account = {page: i + 1};
-        }
-    };
-
-});
-
-
 myApp.controller("profileController", function($scope, $http, user){
+   
+   $scope.nav_account = {page: 1};
 
    $scope.readURL = function(input) {
         if (input.files && input.files[0]) {
@@ -220,6 +209,9 @@ myApp.controller("profileController", function($scope, $http, user){
 });
 
 myApp.controller("showHisrotyController", function($scope, $http, user){
+
+    $scope.nav_account = {page: 2};
+
     $http.get("http://localhost:3000/getHistoryUser/"+user.getIdCurrentUser()).then(function(result){
         if(result.data.length > 0){
             $scope.history = result.data.slice().reverse();

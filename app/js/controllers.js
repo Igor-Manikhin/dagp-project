@@ -178,34 +178,32 @@ myApp.controller("profileController", function($scope, $http, user){
    $scope.nav_account = {page: 1};
 
    $scope.readURL = function(input) {
+        var data = {};
+
         if (input.files && input.files[0]) {
             
             var reader = new FileReader();
             reader.onload = function (e) {
-                
+                data.user_id  = user.getIdCurrentUser();
+                data.image_path = e.target.result;
+                data.type_file = input.files[0].type;
+                data.name_file = input.files[0].name;
+                $(".modal").modal("hide");
+
+                $http.put("http://localhost:3000/account/profile/changeImage", data).then(function(result){
+                    $scope.photoURL = result.data;
+                });
             }
 
             reader.readAsDataURL(input.files[0]);
         }
     };
 
-   if(!localStorage.getItem("UserInfo")){
-
-        $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){
-
-            user.saveUserInfo(result.data);
-            $scope.photoURL = result.data.photoURL;
-            $scope.username = result.data.username;
-            $scope.Email    = result.data.Email;
-        });
-   }
-   else{
-      var data = JSON.parse(localStorage.getItem("UserInfo"));
-      $scope.photoURL = data.photoURL;
-      $scope.username = data.username;
-      $scope.Email    = data.Email;
-   }
-
+    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){
+        $scope.photoURL = result.data.photoURL;
+        $scope.username = result.data.username;
+        $scope.Email    = result.data.Email;
+    });
 });
 
 myApp.controller("showHisrotyController", function($scope, $http, user){

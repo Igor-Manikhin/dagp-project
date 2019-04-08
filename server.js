@@ -102,7 +102,7 @@ app.get('/getHistoryUser/:id', function(req, res){
 app.post("/registration", function(req, res){	
 	var body = req.body;
 	var reg = false;
-	var file_path = null;
+	var file_path = 'media/Standart-image.png';
 
 	pool.connect(function(err, client, done){
 		if(err){
@@ -239,6 +239,35 @@ app.post("/support", function(req, res){
 			})
 	})
 });
+
+app.put("/account/profile/changeImage", function(req, res){
+	var body = req.body;
+	var token = body.user_id;
+	var decoded = jwt.verify(token, publicKey);
+	var files = file.readdirSync("media/" + decoded.username + "/avatar/");
+
+	var reqExp = new RegExp("^data:" + body.type_file + ";base64,");
+	var base64Data = body.image_path.replace(reqExp, "");
+	var file_path = "media/" + decoded.username + "/avatar/" + body.name_file;
+
+	if(files.length != 0){
+		file.unlinkSync("media/" + decoded.username + "/avatar/"+files[0]);
+	}
+
+	file.writeFileSync(file_path, base64Data, 'base64');
+
+	pool.connect(function(err, client, done){
+		client.query("UPDATE users SET photo=$1 WHERE id=$2", [file_path, decoded.id], function(err, result){
+			if(err){
+				return console.log("Bad request!");
+			}
+			done();
+			res.send(file_path);
+		})
+	})
+})
+
+
 
 app.use(function(req, res){
  	 res.sendFile('/app/index.html', { root: __dirname }); 

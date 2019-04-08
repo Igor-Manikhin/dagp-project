@@ -3,16 +3,35 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
 
     $routeProvider
     .when('/', {
+        resolve: {
+            check: function($http, user){
+                if(localStorage.getItem("login")){
+                     $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                        if(!result.data.answer){
+                            user.clearData();
+                        }
+                     })
+                }
+            }
+        },
     	templateUrl: "../pages/main.html",
     	controller: "mainController"
     })
 
     .when('/determination', {
         resolve: {
-            check:  function($location, user){
+            check:  function($location, $http, user){
                         if(!user.isUserLoggedIn()){
                             user.currentURL($location.path());
                             $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
                         }
                     },
         },
@@ -22,10 +41,18 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
 
     .when('/account/profile', {
         resolve: {
-            check:  function($location, user){
+            check:  function($location, $http, user){
                         if(!user.isUserLoggedIn()){
                             user.currentURL($location.path());
                             $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
                         }
                     },
         },
@@ -35,10 +62,18 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
 
     .when('/account/history-determ', {
         resolve: {
-            check:  function($location, user){
+            check:  function($location, $http, user){
                         if(!user.isUserLoggedIn()){
                             user.currentURL($location.path());
                             $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
                         }
                     },
         },
@@ -48,10 +83,18 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
 
     .when('/account/change-data', {
         resolve: {
-            check:  function($location, user){
+            check:  function($location, $http, user){
                         if(!user.isUserLoggedIn()){
                             user.currentURL($location.path());
                             $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
                         }
                     },
         },
@@ -84,6 +127,17 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
     })
 
     .when('/support', {
+        resolve: {
+            check: function($http, user){
+                if(localStorage.getItem("login")){
+                     $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                        if(!result.data.answer){
+                            user.clearData();
+                        }
+                     })
+                }
+            }
+        },
         templateUrl: "../pages/support.html",
         controller: "supportController"
     })

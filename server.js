@@ -83,18 +83,21 @@ app.get('/getUserInfo/:id', function(req, res){
 
 app.get('/getHistoryUser/:id', function(req, res){
 	var token = req.params.id;
-	var decoded = jwt.verify(token, publicKey);
-
-	pool.connect(function(err, client, done){
+	jwt.verify(token, publicKey, function(err, decoded){
 		if(err){
-			return console.log("Error!");
+			return console.log("Token is not verifyed!")
 		}
-		client.query("SELECT * FROM history_determ WHERE user_id = $1", [decoded.id], function(err, result){
+		pool.connect(function(err, client, done){
 			if(err){
-				return console.log("Bad request!");
+				return console.log("Error!");
 			}
-			done();
-			res.send(result.rows);
+			client.query("SELECT * FROM history_determ WHERE user_id = $1", [decoded.id], function(err, result){
+				if(err){
+					return console.log("Bad request!");
+				}
+				done();
+				res.send(result.rows);
+			});
 		});
 	});
 })

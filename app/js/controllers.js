@@ -2,7 +2,6 @@
 myApp.service('user', function(){
        
     var loggedIn = false;
-    var check;
     var currentURL = "/account/profile";
 
     this.isUserLoggedIn = function(){
@@ -20,16 +19,7 @@ myApp.service('user', function(){
         return loggedIn;
     } 
     
-    this.check = function(data){
-        check = data;        
-    }
-
-    this.showCheck = function(){
-        return check;
-    }
-
     this.saveData = function(data){
-        loggedIn = true;
 
         localStorage.setItem("login", JSON.stringify({
             user_id: data.token
@@ -367,10 +357,9 @@ myApp.controller('SidebarController', function($scope, $location) {
 myApp.run(function($http, $location, user){
     if(localStorage.getItem("login")){
             $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
-                user.check(result.data.answer);
                 path = $location.path();
 
-                if(user.showCheck() == false){
+                if(!result.data.answer){
                     var paths = result.data.links;
                     user.clearData();
                     

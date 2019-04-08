@@ -1,43 +1,28 @@
 {
-  "name": "angular-node",
+  "name": "angularjs-nodejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "dagp-project",
   "main": "server.js",
-<<<<<<< HEAD
-  "dependencies": {
-    "body-parser": "^1.18.3",
-    "client-sessions": "^0.8.0",
-    "express": "^4.16.4",
-    "html": "^1.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.9.1",
-    "nodemailer": "^5.1.1",
-    "nodemailer-handlebars": "^1.0.1",
-    "path": "^0.12.7",
-    "pg": "^7.9.0",
-    "pug": "^2.0.3"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
-=======
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Igor-Manikhin/dagp-project.git"
   },
   "author": "Igor-Manikhin",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Igor-Manikhin/dagp-project/issues"
+  },
+  "homepage": "https://github.com/Igor-Manikhin/dagp-project#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
-    "nodemailer": "^6.0.0",
+    "nodemailer": "^6.1.0",
     "nodemailer-handlebars": "^1.0.1",
     "pg": "^7.9.0"
   }
->>>>>>> new changes
 }

@@ -46,6 +46,18 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
         controller: "showHisrotyController"
     })
 
+    .when('/account/change-data', {
+        resolve: {
+            check:  function($location, user){
+                        if(!user.isUserLoggedIn()){
+                            user.currentURL($location.path());
+                            $location.path("/autorization");
+                        }
+                    },
+        },
+        templateUrl: "../pages/account.html",
+        controller: "changeDataController"
+    })
 
     .when('/autorization', {
     	templateUrl: "../pages/autoriz.html",

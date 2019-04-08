@@ -220,6 +220,10 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
     });
 });
 
+myApp.controller("changeDataController", function($scope){
+    $scope.nav_account = {page: 3};
+})
+
 myApp.controller("supportController", function($scope, $http){
 
     $scope.sendSupport = function(event){

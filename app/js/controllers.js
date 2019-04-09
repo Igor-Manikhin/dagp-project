@@ -92,20 +92,20 @@ myApp.controller("registrController", function($scope, $location, $http){
   
         var form = document.getElementById("form");
         var reg;
+        var data = {};
 
         if (form.checkValidity() == false) {
                 event.preventDefault();
                 event.stopPropagation();
         }
         else{
-            var data = {
-                username: $scope.username,
-                email: $scope.email,
-                photoURL: path,
-                type_file: type_file,
-                date: new Date($scope.date).format("yyyy-mm-dd"),
-                password: $scope.password
-            };
+            data.username = $scope.username;
+            data.email    = $scope.email;
+            data.photoURL = path;
+            data.type_file= type_file;
+            data.date     = moment($scope.date, "YYYYMMDD");
+            data.city     = $scope.city;
+            data.password = $scope.password;
 
             $http.post("http://localhost:3000/registration", data).then(function (result) {
                     reg = result.data;
@@ -166,6 +166,7 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
 myApp.controller("profileController", function($scope, $http, user){
    
    $scope.nav_account = {page: 1};
+   moment.locale('ru');
 
    $scope.readURL = function(input) {
         var data = {};
@@ -189,10 +190,12 @@ myApp.controller("profileController", function($scope, $http, user){
         }
     };
 
-    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){
+    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
         $scope.photoURL = result.data.photoURL;
         $scope.username = result.data.username;
         $scope.Email    = result.data.Email;
+        $scope.Date     = moment(result.data.date_birth).format("DD MMMM YYYY г.");
+        $scope.City     = result.data.city;
     });
 });
 

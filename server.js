@@ -54,7 +54,8 @@ app.get('/check/:id', function(req, res){
 
 app.get('/getUserInfo/:id', function(req, res){
  	 var token = req.params.id;
- 	 
+ 	 var data = {};
+
  	 jwt.verify(token, publicKey, function(err, decoded){
  	 	if(err){
  	 		return console.log("Token is not verifyed!")
@@ -69,11 +70,11 @@ app.get('/getUserInfo/:id', function(req, res){
  	 			}
  	 			done();
  	 			if(result.rows.length > 0){
- 	 				var  data = {
- 	 					username: result.rows[0].username,
- 	 					photoURL: result.rows[0].photo,
- 	 					Email: result.rows[0].email
- 	 				}
+ 	 				data.username = result.rows[0].username;
+ 	 				data.photoURL = result.rows[0].photo;
+ 	 				data.Email    = result.rows[0].email;
+ 	 				data.date_birth = result.rows[0].date_birth;
+ 	 				data.city = result.rows[0].city;
  	 				res.send(data);
  	 			}
  	 		})
@@ -83,6 +84,7 @@ app.get('/getUserInfo/:id', function(req, res){
 
 app.get('/getHistoryUser/:id', function(req, res){
 	var token = req.params.id;
+	
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err){
 			return console.log("Token is not verifyed!")
@@ -123,8 +125,8 @@ app.post("/registration", function(req, res){
 			file.writeFileSync(file_path, base64Data, 'base64');
 		}
 
-		client.query("INSERT INTO users (username, password, email, photo, date_birth) VALUES ($1, $2, $3, $4, $5);", 
-		[body.username, body.password, body.email, file_path, body.date], function(err, result){
+		client.query("INSERT INTO users (username, password, email, photo, date_birth, city) VALUES ($1, $2, $3, $4, $5, $6);", 
+		[body.username, body.password, body.email, file_path, body.date, body.city], function(err, result){
 			if(err){
 				console.log(err);
 				return console.log("Bad request!");

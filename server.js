@@ -211,7 +211,7 @@ app.post("/support", function(req, res){
 							secure: true,
   							auth: {
     								user: 'support@dagp.ru',
-    								pass: 'dagprecmail'
+    								pass: 'Cronos1123'
   							}
 					});
 

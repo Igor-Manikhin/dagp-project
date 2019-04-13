@@ -107,7 +107,62 @@
 						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
 							<h5>Изменение данных профиля</h5>
 						</div>
-						<div class="row py-lg-3"></div>
+						<div class="row py-lg-3 justify-content-lg-start">
+							<div class="col-lg-10">
+								<ul class="list-group list-group-flush">
+							  		<li class="d-block list-group-item">
+							  			Информация об пользователе
+							  			<a class="float-right" href="#" ng-click="link = 1">Изменить</a>
+							  			<form class="mt-lg-3" ng-show="link == 1">
+							  				<div class="form-group row">
+							  					<label for="username" class="col-lg-3 col-form-label">Имя пользователя</label>
+							  					<div class="col-lg-5">
+							  						<input class="form-control" id="username" type="text">
+							  					</div>
+							  				</div>
+							  				<div class="form-group row" ng-show="link == 1">
+							  					<label for="Date" class="col-lg-3 col-form-label">Дата рождения</label>
+							  					<div class="col-lg-5">
+							  						<input class="form-control" id="Date" type="Date">
+							  					</div>
+							  				</div>
+							  				<div class="form-group row" ng-show="link == 1">
+							  					<label for="City" class="col-lg-3 col-form-label">Город</label>
+							  					<div class="col-lg-5">
+							  						<input class="form-control" id="City" type="text">
+							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm">Сохранить изменения</button>
+							  					</div>
+							  				</div>
+							  			</form>
+							  		</li>
+							  		<li class="d-block list-group-item">
+							  			Адрес электронной почты
+							  			<a class="float-right" href="#" ng-click="link = 2">Изменить</a>
+							  			<form class="mt-lg-3" ng-show="link == 2">
+							  				<div class="form-group row">
+							  					<label for="Email" class="col-lg-3 col-form-label">Новый адрес</label>
+							  					<div class="col-lg-5">
+							  						<input class="form-control" id="Email" type="email">
+							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm">Сохранить адрес</button>
+							  					</div>
+							  				</div>
+							  			</form>
+							  		</li>
+							  		<li class="d-block list-group-item justify-content-lg-between">
+							  			Пароль<a class="float-right" href="#" ng-click="link = 3">Изменить</a>
+							  			<form class="mt-lg-3" ng-show="link == 3">
+							  				<div class="form-group row">
+							  					<label for="password" class="col-lg-3 col-form-label">Новый пароль</label>
+							  					<div class="col-lg-5">
+							  						<input class="form-control" id="password" type="password">
+							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm">Сохранить пароль</button>
+							  					</div>
+							  				</div>
+							  			</form>
+							  		</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
 		</div>

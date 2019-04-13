@@ -249,6 +249,8 @@ app.put("/account/change-password", function(req, res){
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
+	console.log("User id: "+decoded.id);
+	console.log("New password: "+body.newPassword);
 })
 
 app.put("/account/profile/changeImage", function(req, res){

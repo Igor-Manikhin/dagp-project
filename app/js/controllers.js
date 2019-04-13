@@ -213,26 +213,50 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
 
 myApp.controller("changeDataController", function($scope, $http, user){
     $scope.nav_account = {page: 3};
-
+    
     $scope.showBlock = function(arg){
-        $scope.link = arg;
+        var list = angular.element(document.querySelector(".list"+arg));
+        var link_show = list.find('a').eq(0);
+        var link_hide = list.find('a').eq(1);
+        var form = list.find('form');
+
+        form.removeClass("ng-hide");
+        link_show.addClass("ng-hide");
+        link_hide.removeClass('ng-hide');
     }
 
-    $scope.name_link = "Изменить"
+    $scope.hideBlock = function(arg){
+        var list = angular.element(document.querySelector(".list"+arg));
+        var link_show = list.find('a').eq(0);
+        var link_hide = list.find('a').eq(1);
+        var form = list.find('form');
+
+        form.addClass('ng-hide');
+        link_hide.addClass("ng-hide");
+        link_show.removeClass('ng-hide');
+    }
+
+    $scope.savePassword = function(){
+        var data = {};
+        console.log($scope.password);
+        data.user_id = user.getIdCurrentUser();
+        data.password = $scope.password; 
+        $http.put("http://localhost:3000/account/change-password", data)
+    }
+
+    $scope.saveEmail = function(){
+        var data = {};
+        console.log($scope.email);
+        data.user_id = user.getIdCurrentUser();
+        data.password = $scope.password; 
+        $http.put("http://localhost:3000/account/change-email", data)
+    }
+
     $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
         $scope.username = result.data.username;
         $scope.date_birth = new Date(moment(result.data.date_birth));
         $scope.city = result.data.city;
     });
-})
-
-myApp.controller("change-password", function($scope, $http, user){
-    $scope.savePassword = function(){
-        var data = {};
-        data.user_id = user.getIdCurrentUser();
-        data.newPassword = $scope.newPassword; 
-        $http.put("http://localhost:3000/account/change-password", data)
-    }
 })
 
 myApp.controller("supportController", function($scope, $http){

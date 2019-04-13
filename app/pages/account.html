@@ -110,10 +110,11 @@
 						<div class="row py-lg-3 justify-content-lg-start">
 							<div class="col-lg-10">
 								<ul class="list-group list-group-flush">
-							  		<li class="d-block list-group-item">
-							  			Информация об пользователе
-							  			<a class="float-right" href="#" ng-click="showBlock(1)">{{name_link}}</a>
-							  			<form class="mt-lg-3" ng-show="link == 1">
+							  		<li class="list1 list-group-item">
+							  			<span>Информация об пользователе</span>
+							  			<a class="float-right" href="#" ng-click="showBlock(1)">Изменить</a>
+							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(1)">Отмена</a>
+							  			<form class="ng-hide form1 mt-lg-3">
 							  				<div class="form-group row">
 							  					<label for="username" class="col-lg-3 col-form-label">Имя пользователя</label>
 							  					<div class="col-lg-5">
@@ -135,27 +136,29 @@
 							  				</div>
 							  			</form>
 							  		</li>
-							  		<li class="d-block list-group-item">
-							  			Адрес электронной почты
-							  			<a class="float-right" href="#" ng-click="showBlock(2)">{{name_link}}</a>
-							  			<form class="mt-lg-3" ng-show="link == 2">
+							  		<li class="list2 list-group-item">
+							  			<span>Адрес электронной почты</span>
+							  			<a class="float-right" href="#" ng-click="showBlock(2)">Изменить</a>
+							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(2)">Отмена</a>
+							  			<form class="ng-hide form2 mt-lg-3">
 							  				<div class="form-group row">
 							  					<label for="Email" class="col-lg-3 col-form-label">Новый адрес</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="Email" type="email">
-							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm">Сохранить адрес</button>
+							  						<input class="form-control" id="Email" type="email" ng-model="email">
+							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm" ng-click="saveEmail()">Сохранить адрес</button>
 							  					</div>
 							  				</div>
 							  			</form>
 							  		</li>
-							  		<li class="d-block list-group-item justify-content-lg-between">
-							  			Пароль
-							  			<a class="float-right" href="#" ng-click="showBlock(3)">{{name_link}}</a>
-							  			<form class="mt-lg-3" ng-show="link == 3" ng-controller="change-password">
+							  		<li class="list3 list-group-item justify-content-lg-between">
+							  			<span>Пароль</span>
+							  			<a class="float-right" href="#" ng-click="showBlock(3)">Изменить</a>
+							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(3)">Отмена</a>
+							  			<form class="ng-hide form3 mt-lg-3">
 							  				<div class="form-group row">
 							  					<label for="password" class="col-lg-3 col-form-label">Новый пароль</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="password" type="password" autocomplete="off" ng-model="newPassword">
+							  						<input class="form-control" id="password" type="password" ng-model="password">
 							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm" ng-click="savePassword()">Сохранить пароль</button>
 							  					</div>
 							  				</div>

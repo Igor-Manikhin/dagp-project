@@ -245,6 +245,12 @@ app.post("/support", function(req, res){
 	})
 });
 
+app.put("/account/change-password", function(req, res){
+	var body = req.body;
+	var token = body.user_id;
+	var decoded = jwt.verify(token, publicKey);
+})
+
 app.put("/account/profile/changeImage", function(req, res){
 	var body = req.body;
 	var token = body.user_id;

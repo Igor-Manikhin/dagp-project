@@ -211,8 +211,28 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
     });
 });
 
-myApp.controller("changeDataController", function($scope){
+myApp.controller("changeDataController", function($scope, $http, user){
     $scope.nav_account = {page: 3};
+
+    $scope.showBlock = function(arg){
+        $scope.link = arg;
+    }
+
+    $scope.name_link = "Изменить"
+    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
+        $scope.username = result.data.username;
+        $scope.date_birth = new Date(moment(result.data.date_birth));
+        $scope.city = result.data.city;
+    });
+})
+
+myApp.controller("change-password", function($scope, $http, user){
+    $scope.savePassword = function(){
+        var data = {};
+        data.user_id = user.getIdCurrentUser();
+        data.newPassword = $scope.newPassword; 
+        $http.put("http://localhost:3000/account/change-password", data)
+    }
 })
 
 myApp.controller("supportController", function($scope, $http){

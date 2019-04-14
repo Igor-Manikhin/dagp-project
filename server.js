@@ -245,12 +245,30 @@ app.post("/support", function(req, res){
 	})
 });
 
+app.put("/account/updateUserInfo", function(req, res){
+	var body = req.body;
+	var token = body.user_id;
+	var decoded = jwt.verify(token, publicKey);
+	console.log("User id: "+decoded.id);
+	console.log("New username: "+body.username);
+	console.log("New date birth: "+body.date_birth);
+	console.log("New city: "+body.city);
+})
+
+app.put("/account/change-email", function(req, res){
+	var body = req.body;
+	var token = body.user_id;
+	var decoded = jwt.verify(token, publicKey);
+	console.log("User id: "+decoded.id);
+	console.log("New email: "+body.email);
+})
+
 app.put("/account/change-password", function(req, res){
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
 	console.log("User id: "+decoded.id);
-	console.log("New password: "+body.newPassword);
+	console.log("New password: "+body.password);
 })
 
 app.put("/account/profile/changeImage", function(req, res){

@@ -112,39 +112,39 @@
 								<ul class="list-group list-group-flush">
 							  		<li class="list1 list-group-item">
 							  			<span>Информация об пользователе</span>
-							  			<a class="float-right" href="#" ng-click="showBlock(1)">Изменить</a>
-							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(1)">Отмена</a>
-							  			<form class="ng-hide form1 mt-lg-3">
+							  			<a class="float-right" href="#" ng-hide="link == 1" ng-click="showBlock(1)">Изменить</a>
+							  			<a class="float-right" href="#" ng-show="link == 1" ng-click="hideBlock(1)">Отмена</a>
+							  			<form class="form1 mt-lg-3" ng-show="link == 1">
 							  				<div class="form-group row">
 							  					<label for="username" class="col-lg-3 col-form-label">Имя пользователя</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="username" type="text" ng-model="username">
+							  						<input class="form-control" id="username" type="text" ng-model="$parent.username">
 							  					</div>
 							  				</div>
 							  				<div class="form-group row">
 							  					<label for="Date" class="col-lg-3 col-form-label">Дата рождения</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="Date" type="Date" ng-model="date_birth">
+							  						<input class="form-control" id="Date" type="Date" ng-model="$parent.date_birth">
 							  					</div>
 							  				</div>
 							  				<div class="form-group row">
 							  					<label for="City" class="col-lg-3 col-form-label">Город</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="City" type="text" ng-model="city">
-							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm">Сохранить изменения</button>
+							  						<input class="form-control" id="City" type="text" ng-model="$parent.city">
+							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo()">Сохранить изменения</button>
 							  					</div>
 							  				</div>
 							  			</form>
 							  		</li>
 							  		<li class="list2 list-group-item">
 							  			<span>Адрес электронной почты</span>
-							  			<a class="float-right" href="#" ng-click="showBlock(2)">Изменить</a>
-							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(2)">Отмена</a>
-							  			<form class="ng-hide form2 mt-lg-3">
+							  			<a class="float-right" href="#" ng-hide="link == 2" ng-click="showBlock(2)">Изменить</a>
+							  			<a class="float-right" href="#" ng-show="link == 2" ng-click="hideBlock(2)">Отмена</a>
+							  			<form class="form2 mt-lg-3" ng-show="link == 2">
 							  				<div class="form-group row">
 							  					<label for="Email" class="col-lg-3 col-form-label">Новый адрес</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="Email" type="email" ng-model="email">
+							  						<input class="form-control" id="Email" type="email" ng-model="$parent.email">
 							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm" ng-click="saveEmail()">Сохранить адрес</button>
 							  					</div>
 							  				</div>
@@ -152,13 +152,13 @@
 							  		</li>
 							  		<li class="list3 list-group-item justify-content-lg-between">
 							  			<span>Пароль</span>
-							  			<a class="float-right" href="#" ng-click="showBlock(3)">Изменить</a>
-							  			<a class="ng-hide float-right" href="#" ng-click="hideBlock(3)">Отмена</a>
-							  			<form class="ng-hide form3 mt-lg-3">
+							  			<a class="float-right" href="#" ng-hide="link == 3" ng-click="showBlock(3)">Изменить</a>
+							  			<a class="float-right" href="#" ng-show="link == 3" ng-click="hideBlock(3)">Отмена</a>
+							  			<form class="form3 mt-lg-3" ng-show="link == 3">
 							  				<div class="form-group row">
 							  					<label for="password" class="col-lg-3 col-form-label">Новый пароль</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="password" type="password" ng-model="password">
+							  						<input class="form-control" id="password" type="password" ng-model="$parent.password">
 							  						<button type="button" class="mt-lg-2 btn btn-primary btn-sm" ng-click="savePassword()">Сохранить пароль</button>
 							  					</div>
 							  				</div>

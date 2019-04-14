@@ -213,32 +213,25 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
 
 myApp.controller("changeDataController", function($scope, $http, user){
     $scope.nav_account = {page: 3};
-    
     $scope.showBlock = function(arg){
-        var list = angular.element(document.querySelector(".list"+arg));
-        var link_show = list.find('a').eq(0);
-        var link_hide = list.find('a').eq(1);
-        var form = list.find('form');
-
-        form.removeClass("ng-hide");
-        link_show.addClass("ng-hide");
-        link_hide.removeClass('ng-hide');
+        $scope.link = arg;
     }
 
     $scope.hideBlock = function(arg){
-        var list = angular.element(document.querySelector(".list"+arg));
-        var link_show = list.find('a').eq(0);
-        var link_hide = list.find('a').eq(1);
-        var form = list.find('form');
+        $scope.link = 0;
+    }
 
-        form.addClass('ng-hide');
-        link_hide.addClass("ng-hide");
-        link_show.removeClass('ng-hide');
+    $scope.updateUserInfo = function(){
+        var data = {};
+        data.user_id = user.getIdCurrentUser();
+        data.username = $scope.username;
+        data.date_birth = moment($scope.date_birth, "YYYYMMDD");
+        data.city = $scope.city; 
+        $http.put("http://localhost:3000/account/updateUserInfo", data);
     }
 
     $scope.savePassword = function(){
         var data = {};
-        console.log($scope.password);
         data.user_id = user.getIdCurrentUser();
         data.password = $scope.password; 
         $http.put("http://localhost:3000/account/change-password", data)
@@ -246,9 +239,8 @@ myApp.controller("changeDataController", function($scope, $http, user){
 
     $scope.saveEmail = function(){
         var data = {};
-        console.log($scope.email);
         data.user_id = user.getIdCurrentUser();
-        data.password = $scope.password; 
+        data.email = $scope.email; 
         $http.put("http://localhost:3000/account/change-email", data)
     }
 

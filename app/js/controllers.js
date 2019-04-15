@@ -97,13 +97,14 @@ myApp.controller("registrController", function($scope, $location, $http){
         if (form.checkValidity() == false) {
                 event.preventDefault();
                 event.stopPropagation();
+                form.classList.add("was-validated");
         }
         else{
             data.username = $scope.username;
             data.email    = $scope.email;
             data.photoURL = path;
             data.type_file= type_file;
-            data.date     = moment($scope.date, "YYYYMMDD");
+            data.date     = moment($scope.date).format("YYYY-MM-DD");
             data.city     = $scope.city;
             data.password = $scope.password;
 
@@ -114,7 +115,6 @@ myApp.controller("registrController", function($scope, $location, $http){
                     }    
             });
         }
-        form.classList.add("was-validated");
     }
 });
 
@@ -146,6 +146,7 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
         if (form.checkValidity() == false) {
                 event.preventDefault();
                 event.stopPropagation();
+                form.classList.add("was-validated");
         }
         else{
                 var data = {
@@ -159,7 +160,6 @@ myApp.controller("autorizController", function($scope, $location, $http, $cookie
                     }
                 });
         }
-        form.classList.add("was-validated");
     }
 });
 
@@ -218,30 +218,65 @@ myApp.controller("changeDataController", function($scope, $http, user){
     }
 
     $scope.hideBlock = function(arg){
+        var form = document.getElementById("needs-validation"+arg);
+        form.classList.remove("was-validated");
+        if(arg == 1){
+            $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
+                $scope.username = result.data.username;
+                $scope.date_birth = new Date(moment(result.data.date_birth));
+                $scope.city = result.data.city;
+            });
+        }
         $scope.link = 0;
     }
 
     $scope.updateUserInfo = function(){
+        var form = document.getElementById("needs-validation1");
         var data = {};
-        data.user_id = user.getIdCurrentUser();
-        data.username = $scope.username;
-        data.date_birth = moment($scope.date_birth, "YYYYMMDD");
-        data.city = $scope.city; 
-        $http.put("http://localhost:3000/account/updateUserInfo", data);
+
+        if (form.checkValidity() == false) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add("was-validated");
+        }
+        else{
+            data.user_id = user.getIdCurrentUser();
+            data.username = $scope.username;
+            data.date_birth = moment($scope.date_birth).format("YYYY-MM-DD");
+            data.city = $scope.city; 
+            $http.put("http://localhost:3000/account/updateUserInfo", data);
+        }
     }
 
     $scope.savePassword = function(){
+        var form = document.getElementById("needs-validation3");
         var data = {};
-        data.user_id = user.getIdCurrentUser();
-        data.password = $scope.password; 
-        $http.put("http://localhost:3000/account/change-password", data)
+
+        if (form.checkValidity() == false) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add("was-validated");
+        }
+        else{
+            data.user_id = user.getIdCurrentUser();
+            data.password = $scope.password; 
+            $http.put("http://localhost:3000/account/change-password", data);
+        }
     }
 
     $scope.saveEmail = function(){
+        var form = document.getElementById("needs-validation2");
         var data = {};
-        data.user_id = user.getIdCurrentUser();
-        data.email = $scope.email; 
-        $http.put("http://localhost:3000/account/change-email", data)
+        if (form.checkValidity() == false) {
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add("was-validated");
+        }
+        else{
+            data.user_id = user.getIdCurrentUser();
+            data.email = $scope.email; 
+            $http.put("http://localhost:3000/account/change-email", data)
+        }
     }
 
     $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 

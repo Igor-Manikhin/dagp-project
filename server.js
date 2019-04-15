@@ -249,10 +249,16 @@ app.put("/account/updateUserInfo", function(req, res){
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
-	console.log("User id: "+decoded.id);
-	console.log("New username: "+body.username);
-	console.log("New date birth: "+body.date_birth);
-	console.log("New city: "+body.city);
+
+	pool.connect(function(err, client, done){
+		client.query("UPDATE users SET username=$1, date_birth=$2, city=$3 WHERE id=$4", [body.username, body.date_birth, body.city, decoded.id],
+		function(err, result){
+			if(err){
+				return console.log("Bad request!");
+			}
+			done();
+		})
+	})
 })
 
 app.put("/account/change-email", function(req, res){

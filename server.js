@@ -259,8 +259,15 @@ app.put("/account/change-email", function(req, res){
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
-	console.log("User id: "+decoded.id);
-	console.log("New email: "+body.email);
+
+	pool.connect(function(err, client, done){
+		client.query("UPDATE users SET email=$1 WHERE id=$2", [body.email, decoded.id], function(err, result){
+			if(err){
+				return console.log("Bad request!");
+			}
+			done();
+		})
+	})
 })
 
 app.put("/account/change-password", function(req, res){
@@ -297,7 +304,6 @@ app.put("/account/profile/changeImage", function(req, res){
 		})
 	})
 })
-
 
 
 app.use(function(req, res){

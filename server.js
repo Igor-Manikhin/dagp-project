@@ -108,41 +108,61 @@ app.post("/registration", function(req, res){
 	var body = req.body;
 	var reg = false;
 	var file_path = 'media/Standart-image.png';
+	var keyNames = Object.keys(body);
+
 
 	pool.connect(function(err, client, done){
 		if(err){
 			return console.log("Error!");
 		}
 
-		file.mkdirSync("media/" + body.username); 
-		file.mkdirSync("media/" + body.username + "/determ_history");
-		file.mkdirSync("media/"+ body.username + "/avatar");
-
-		if(body.photoURL != undefined){
-			var reqExp = new RegExp("^data:" + body.type_file + ";base64,");
-			var base64Data = body.photoURL.replace(reqExp, "");
-			file_path = "media/" + body.username + "/avatar/avatar." + body.type_file.split("/")[1];
-			file.writeFileSync(file_path, base64Data, 'base64');
-		}
-
-		client.query("INSERT INTO users (username, password, email, photo, date_birth, city) VALUES ($1, $2, $3, $4, $5, $6);", 
-		[body.username, body.password, body.email, file_path, body.date, body.city], function(err, result){
+		client.query("SELECT * FROM users WHERE username = $1 OR email = $2", [body.username, body.email], function(err, result){
 			if(err){
-				console.log(err);
 				return console.log("Bad request!");
+			};
+
+			if(result.rows.length > 0){
+				done();
+				for(var i = 0; i < result.rows.length; i++){
+					if(result.rows[i].username == body.username){
+						return console.log(body.username+" уже занято!");
+					}
+					if(result.rows[i].email == body.email){
+						return console.log(body.email+" уже занят!");
+					}
+				}
 			}
-			done();
 
-			reg = true;
-			res.send(reg);
-		})
+			file.mkdirSync("media/" + body.username); 
+			file.mkdirSync("media/" + body.username + "/determ_history");
+			file.mkdirSync("media/"+ body.username + "/avatar");
+
+			if(body.photoURL != undefined){
+				var reqExp = new RegExp("^data:" + body.type_file + ";base64,");
+				var base64Data = body.photoURL.replace(reqExp, "");
+				file_path = "media/" + body.username + "/avatar/avatar." + body.type_file.split("/")[1];
+				file.writeFileSync(file_path, base64Data, 'base64');
+			};
+
+			client.query("INSERT INTO users (username, password, email, photo, date_birth, city) VALUES ($1, $2, $3, $4, $5, $6);", 
+			[body.username, body.password, body.email, file_path, body.date, body.city], function(err, result){
+				if(err){
+					console.log(err);
+					return console.log("Bad request!");
+				}
+				done();
+
+				reg = true;
+				res.send(reg);
+			});
+		});
 	});
-
 })
 
 app.post("/autorization", function(req, res) {
 	var body = req.body;
-	var json;  
+	var json; 
+
 	pool.connect(function(err, client, done){
 		if(err){
 			return console.log("Error!");

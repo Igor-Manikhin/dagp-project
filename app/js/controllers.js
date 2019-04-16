@@ -135,13 +135,12 @@ myApp.controller("recoveryController", function($scope){
     }
 });
 
-myApp.controller("autorizController", function($scope, $location, $http, $cookies, user){
+myApp.controller("autorizController", function($scope, $location, $http, user){
     
     $scope.loggIn = function(event){
         
         var form = document.getElementById("needs-validation");
         var path = user.isCurrentURL();
-        var auth;
 
         if (form.checkValidity() == false) {
                 event.preventDefault();

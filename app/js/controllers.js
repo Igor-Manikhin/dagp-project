@@ -89,14 +89,20 @@ myApp.controller("registrController", function($scope, $location, $http){
     };
 
     $scope.registr = function(event){
-  
+        
+        var username_input = angular.element(document.querySelector('#Username'));
+        var username_feedback = angular.element(document.querySelector('#feedback-username'));
+        var email_input = angular.element(document.querySelector('#Email'));
+        var email_feedback = angular.element(document.querySelector('#feedback-email'));
+        var base_text_feedback = "Данное поле обязательно для заполнения";
         var form = document.getElementById("form");
-        var reg;
         var data = {};
 
         if (form.checkValidity() == false) {
                 event.preventDefault();
                 event.stopPropagation();
+                username_feedback.text(base_text_feedback);
+                email_feedback.text(base_text_feedback);
                 form.classList.add("was-validated");
         }
         else{
@@ -108,9 +114,17 @@ myApp.controller("registrController", function($scope, $location, $http){
             data.city     = $scope.city;
             data.password = $scope.password;
 
+            form.classList.remove("was-validated");
             $http.post("http://localhost:3000/registration", data).then(function (result) {
-                    reg = result.data;
-                    if(reg == true){
+                    if(result.data.check_username == false){
+                        username_input.addClass('is-invalid');
+                        username_feedback.text("Данное имя пользователя уже занято");
+                    }
+                    if(result.data.check_email == false){
+                        email_input.addClass('is-invalid');
+                        email_feedback.text("Данный адрес электронной почты уже занят")
+                    }
+                    if(result.data.reg == true){
                           $scope.message = true;
                     }    
             });

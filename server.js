@@ -106,10 +106,8 @@ app.get('/getHistoryUser/:id', function(req, res){
 
 app.post("/registration", function(req, res){	
 	var body = req.body;
-	var reg = false;
 	var file_path = 'media/Standart-image.png';
-	var keyNames = Object.keys(body);
-
+	var feedback_info = {};
 
 	pool.connect(function(err, client, done){
 		if(err){
@@ -122,15 +120,17 @@ app.post("/registration", function(req, res){
 			};
 
 			if(result.rows.length > 0){
-				done();
+				feedback_info.reg = false;
 				for(var i = 0; i < result.rows.length; i++){
 					if(result.rows[i].username == body.username){
-						return console.log(body.username+" уже занято!");
+						feedback_info.check_username = false;
 					}
 					if(result.rows[i].email == body.email){
-						return console.log(body.email+" уже занят!");
+						feedback_info.check_email = false;
 					}
 				}
+				done();
+				return res.send(feedback_info);
 			}
 
 			file.mkdirSync("media/" + body.username); 
@@ -152,8 +152,10 @@ app.post("/registration", function(req, res){
 				}
 				done();
 
-				reg = true;
-				res.send(reg);
+				feedback_info.reg = true;
+				feedback_info.check_username = true;
+				feedback_info.check_email = true;
+				res.send(feedback_info);
 			});
 		});
 	});

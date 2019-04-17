@@ -6,10 +6,12 @@
          					<div class="form-group">
     							<label for="Username">Имя пользователя</label>
     							<input type="text" class="form-control" id="Username" ng-model="username" placeholder="Введите имя пользователя" required>
+                  <div class="invalid-feedback" id="feedback-username"></div>
   							</div>
   							<div class="form-group">
     							<label for="Email">Адрес электронной почты</label>
     							<input type="email" class="form-control" id="Email" ng-model="email" placeholder="Введите адрес электронной почты" required>
+                  <div class="invalid-feedback" id="feedback-email"></div>
   							</div>
   							<div class="form-group">
     							<label for="Date">Дата рождения</label>
@@ -29,6 +31,9 @@
   							<div class="form-group">
     							<label for="Password">Пароль</label>
     							<input type="password" class="form-control" id="Password" ng-model="password" placeholder="Введите пароль" required>
+                  <div class="invalid-feedback">
+                      Данное поле обязательно для заполнения
+                  </div>
   							</div>
   							<div class="form-group d-flex justify-content-center">
   								<button ng-click="registr($event)" class="btn btn-primary">Зарегистрироваться</button>

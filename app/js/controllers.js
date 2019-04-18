@@ -3,7 +3,7 @@ myApp.service('user', function(){
        
     var loggedIn = false;
     var currentURL = "/account/profile";
-
+    
     this.isUserLoggedIn = function(){
         
         var autoriz = angular.element(document.querySelector("#autoriz"));
@@ -22,6 +22,7 @@ myApp.service('user', function(){
     this.saveData = function(data){
 
         localStorage.setItem("login", JSON.stringify({
+            root_admin: data.root_admin,
             user_id: data.token
         }))
     }
@@ -32,6 +33,11 @@ myApp.service('user', function(){
             username: data.username,
             Email: data.Email
         }))
+    }
+
+    this.checkRoots = function(){
+        var data = JSON.parse(localStorage.getItem("login"));
+        return data.root_admin;
     }
 
     this.getIdCurrentUser = function(){
@@ -176,6 +182,12 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
     }
 });
 
+myApp.controller("AccountMemuCtl", function($scope, user){
+    if(user.checkRoots()){
+        $scope.access = true;
+    }
+});
+
 myApp.controller("profileController", function($scope, $http, user){
    
    $scope.nav_account = {page: 1};
@@ -224,8 +236,34 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
     });
 });
 
-myApp.controller("changeDataController", function($scope, $http, user){
+myApp.controller("changePasswordsUsers", function($scope, $http, user){
     $scope.nav_account = {page: 3};
+
+    $http.get("http://localhost:3000/getListUsers/"+user.getIdCurrentUser()).then(function(result){
+        $scope.usernames = result.data;
+    });
+
+    $scope.changeUserPassword = function(){
+        var form = document.getElementById("needs-validation");
+        var data = {};
+        
+        if(form.checkValidity() == false){
+            event.preventDefault();
+            event.stopPropagation();
+            form.classList.add("was-validated");
+        }
+        else{
+            data.user_id = user.getIdCurrentUser();
+            data.username = $scope.selectedUsername;
+            data.newUserPassword = $scope.newUserPassword;
+
+            $http.put("http://localhost:3000/changeUserPassword", data);
+        }
+    }
+})
+
+myApp.controller("changeDataController", function($scope, $http, user){
+    $scope.nav_account = {page: 4};
     $scope.showBlock = function(arg){
         $scope.link = arg;
     }

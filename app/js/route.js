@@ -1,5 +1,5 @@
 var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
-   .config(function($routeProvider, $httpProvider,$locationProvider){
+   .config(function($routeProvider, $httpProvider, $locationProvider){
 
     $routeProvider
     .when('/', {
@@ -81,6 +81,27 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
         controller: "showHisrotyController"
     })
 
+    .when('/account/changePasswordsUsers', {
+        resolve: {
+            check:  function($location, $http, user){
+                        if(!user.isUserLoggedIn()){
+                            user.currentURL($location.path());
+                            $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
+                        }
+                    },
+        },
+        templateUrl: "../pages/account.html",
+        controller: "changePasswordsUsers"
+    })
+
     .when('/account/change-data', {
         resolve: {
             check:  function($location, $http, user){
@@ -149,5 +170,3 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
     $locationProvider.html5Mode(true);
     $locationProvider.hashPrefix('!');
 });
-
-

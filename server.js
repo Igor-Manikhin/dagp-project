@@ -5,8 +5,9 @@ var pg         = require('pg');
 var file       = require('fs');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
-var hbs        = require('nodemailer-handlebars'); 
+var hbs        = require('nodemailer-handlebars');
 var app        = express();
+const { check, validationResult } = require('express-validator/check'); 
 
 var port = process.env.PORT || 3000;
 
@@ -32,6 +33,41 @@ app.use(express.static(__dirname + "/app"));
 app.use(bodyParser.json({limit: "100mb", type:'application/json'}));
 app.use(bodyParser.urlencoded({limit: "100mb", extended: true, type:'application/json'}));
 
+
+
+app.get('/getListUsers/:id', function(req, res){
+	var token = req.params.id;
+	var usernames = [];
+
+	jwt.verify(token, publicKey, function(err, decoded){
+		if(err){
+			return console.log("Token is not verifyed!");
+		};
+
+		if(decoded.id != 106){
+			return console.log("Access denied!");
+		};
+
+		pool.connect(function(err, client, done){
+			if(err){
+				return console.log("Error!");
+			};
+			client.query("SELECT * FROM users", function(err, result){
+				if(err){
+					return console.log("Bad request!");
+				};
+				done();
+				for(var i = 0; i < result.rows.length; i++){
+					if(result.rows[i].username != 'Admin'){
+						usernames.push(result.rows[i].username);
+					}
+				}
+
+				res.send(usernames);
+			})
+		})
+	});
+})
 
 app.get('/check/:id', function(req, res){
 	 var token = req.params.id;
@@ -77,9 +113,9 @@ app.get('/getUserInfo/:id', function(req, res){
  	 				data.city = result.rows[0].city;
  	 				res.send(data);
  	 			}
- 	 		})
- 	 	})
- 	 })
+ 	 		});
+ 	 	});
+ 	 });
 });
 
 app.get('/getHistoryUser/:id', function(req, res){
@@ -163,7 +199,8 @@ app.post("/registration", function(req, res){
 
 app.post("/autorization", function(req, res) {
 	var body = req.body;
-	var json; 
+	var json = {}; 
+    json.root_admin = false;
 
 	pool.connect(function(err, client, done){
 		if(err){
@@ -177,10 +214,12 @@ app.post("/autorization", function(req, res) {
 				done();
 				if(result.rows.length > 0){
 					var token = jwt.sign({ id: result.rows[0].id, username: result.rows[0].username }, privateKey, {algorithm: 'RS256'});
-					json = {
-						loggedIn: true,
-						token: token,
+					if(result.rows[0].id == 106){
+						json.root_admin = true;
 					}
+					json.loggedIn = true;
+					json.token = token;
+					
 					res.send(json);
 				}
 		})
@@ -304,6 +343,34 @@ app.put("/account/change-password", function(req, res){
 	var decoded = jwt.verify(token, publicKey);
 	console.log("User id: "+decoded.id);
 	console.log("New password: "+body.password);
+})
+
+app.put("/changeUserPassword", function(req, res){
+	var body = req.body;
+	var token = body.user_id;
+
+	jwt.verify(token, publicKey, function(err, decoded){
+		if(err){
+			return console.log("Token is not verifyed!");
+		}
+
+		if(decoded.id != 106){
+			return console.log("Access denied!");
+		}
+
+		pool.connect(function(err, client, done){
+			if(err){
+				return console.log("Error!");
+			}
+
+			client.query("UPDATE users SET password=$1 WHERE username=$2", [body.newUserPassword, body.username], function(err){
+				if(err){
+					return console.log("Bad request!");
+				}
+				done();
+			})
+		})
+	})
 })
 
 app.put("/account/profile/changeImage", function(req, res){

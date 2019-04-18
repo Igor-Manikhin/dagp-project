@@ -1,19 +1,19 @@
-<div class="account">
+<div class="account bg-light">
 			<div class="container-custom">
 				<div class="row justify-content-center justify-content-lg-around align-items-lg-start my-5 my-lg-1 pt-lg-5" style="height: 100vh;">
 					<div class="col-md-5 col-lg-3">
-						<ul class="nav d-flex flex-column py-3 py-lg-4 nav-acc" style="background-color: #4a8ee3;" >
-  							<li class="nav-item">
-    							<a class="nav-link" href="/account/profile">Профиль</a>
+						<ul class="nav d-flex flex-column px-lg-4 py-3 py-lg-4 nav-acc" style="background-color: #4a8ee3;" >
+  							<li class="nav-item py-lg-1">
+    							<a class="nav-link text-light" href="/account/profile">Профиль</a>
   							</li>
-  							<li class="nav-item">
-    							<a class="nav-link" href="/account/history-determ">История распознаваний</a>
+  							<li class="nav-item py-lg-1">
+    							<a class="nav-link text-light" href="/account/history-determ">История распознаваний</a>
   							</li>
-  							<li class="nav-item">
-    							<a class="nav-link" href="/account/change-data">Изменить данные профиля</a>
+  							<li class="nav-item py-lg-1">
+    							<a class="nav-link text-light" href="/account/change-data">Изменить данные профиля</a>
   							</li>
-  							<li class="nav-item">
-    							<a class="nav-link" href="/logout">Выйти из аккаунта</a>
+  							<li class="nav-item py-lg-1">
+    							<a class="nav-link text-light" href="/logout">Выйти из аккаунта</a>
   							</li>
 						</ul>
 					</div>
@@ -26,7 +26,7 @@
 								<div class="card px-lg-2 pt-2">
   									<img class="card-img-top" ng-src="{{photoURL}}" alt="Card image cap" width="250" height="250">
   									<div class="card-body">
-										<a class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal" style="color: #fff;">Редактировать</a>
+										<a class="btn btn-primary btn-block text-light" data-toggle="modal" data-target="#exampleModal">Редактировать</a>
   									</div>
 								</div>
 								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -66,11 +66,11 @@
 						</div>
 					</div>
 					<div class="col-11 col-lg-8 ml-lg-5" ng-controller="showHisrotyController" ng-if="nav_account.page == 2">
-						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
+						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start">
 							<h5>История распознаваний</h5>
 						</div>
 						<div class="row py-lg-3">
-							<div class="d-flex col-12 col-lg-12 justify-content-lg-center align-items-lg-center" ng-hide="history_determ" style="background-color: #e6e6e6; height: 350px;">
+							<div class="d-flex col-12 col-lg-12 justify-content-lg-center align-items-lg-center" ng-hide="history_determ">
 								<h4>История распознаваний пустая</h4>
 							</div>
 							<div class="col-12 col-lg-12" ng-show="history_determ" style="height: 350px; overflow-y: scroll;">
@@ -104,13 +104,13 @@
 						</div>
 					</div>
 					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 3">
-						<div class="row mb-lg-2 justify-content-center justify-content-lg-start">
+						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start">
 							<h5>Изменение данных профиля</h5>
 						</div>
 						<div class="row py-lg-3 justify-content-lg-start">
 							<div class="col-lg-10">
 								<ul class="list-group list-group-flush">
-							  		<li class="px-0 px-lg-0 list1 list-group-item">
+							  		<li class="px-0 px-lg-0 list1 list-group-item bg-light">
 							  			<span>Информация об пользователе</span>
 							  			<a class="float-right" href="#" ng-hide="link == 1" ng-click="showBlock(1)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 1" ng-click="hideBlock(1)">Отмена</a>
@@ -138,7 +138,7 @@
 							  				</div>
 							  			</form>
 							  		</li>
-							  		<li class="px-0 px-lg-0 list2 list-group-item">
+							  		<li class="px-0 px-lg-0 list2 list-group-item bg-light">
 							  			<span>Адрес электронной почты</span>
 							  			<a class="float-right" href="#" ng-hide="link == 2" ng-click="showBlock(2)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 2" ng-click="hideBlock(2)">Отмена</a>
@@ -154,7 +154,7 @@
 							  				</div>
 							  			</form>
 							  		</li>
-							  		<li class="px-0 px-lg-0 list3 list-group-item justify-content-lg-between">
+							  		<li class="px-0 px-lg-0 list3 list-group-item justify-content-lg-between bg-light">
 							  			<span>Пароль</span>
 							  			<a class="float-right" href="#" ng-hide="link == 3" ng-click="showBlock(3)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 3" ng-click="hideBlock(3)">Отмена</a>

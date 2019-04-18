@@ -1,25 +1,23 @@
 <div class="determ position-relative">
-   <div class="d-none justify-content-center position-absolute align-items-center align-items-lg-center loading">
+   <div class="d-none justify-content-center position-absolute align-items-center align-items-lg-center loading h-100 w-100">
          <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                <span class="sr-only">Loading...</span>
          </div>
    </div>
-   <div class="interface position-relative" style="z-index: 1;">
+   <div class="interface position-relative bg-light" style="z-index: 1;">
             <div class="container-fluid pt-xl-5">
                <div class="row justify-content-center justify-content-lg-around">
                   <div class="col-lg-3 col-xl-4 mt-2 pt-lg-1">
                      <h2>Определение возраста и пола</h2>
                      <p>Для начала процесса распознавания загрузите изображение c лицом человека, возраст, возрастную группу и пол которого вы хотите распознать, затем нажмите кнопку "Начать распознавание". После окончания распознавания результаты будут выведены в диалоговое окно</p>
                   </div>
-                  <div class="col-12 col-lg-3 col-xl-3 order-12 order-lg-1 pt-0 pt-lg-1">
-                     <div class="results">
-                        <h5>Результаты распознавания</h5>
-                        <ul ng-controller="determinationController" class="list_results px-3 py-4 px-lg-5 py-lg-5">
+                  <div class="col-12 col-lg-3 col-xl-3 order-12 order-lg-1 pt-0 pt-lg-1 justify-content-lg-center results">
+                        <h5 style="text-align: center;">Результаты распознавания</h5>
+                        <ul ng-controller="determinationController" class="list_results px-3 py-4 px-lg-5 py-lg-5 text-light">
                             <li>Возраст: {{age}}</li>
                             <li>Пол: {{gender}}</li>
                             <li>Возрастная группа: {{age_group}} </li>
                         </ul>
-                     </div>
                   </div>
                   <div class="col-12 col-lg-7 col-xl-5 order-1 order-lg-12">
                      <div class="d-flex photo_window justify-content-center justify-content-lg-center overflow-hidden position-relative">

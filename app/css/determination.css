@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 .loading{
-   height:100%;
-   width: 100%; 
    z-index: 99; 
    background-color: grey; 
    opacity: 0.7;
@@ -11,15 +9,10 @@
 main div.interface{
 	min-height: 100vh;
    max-height: 1200px;
-	background-color: #fff;
 }
 
 main div.results{
-	margin-top: 100px;
-}
-
-main div.results h5{
-	text-align: center;
+   margin-top: 100px;
 }
 
 main ul.list_results{
@@ -27,7 +20,6 @@ main ul.list_results{
    background-color: #4a8ee3;	
    list-style-type: none;
    font-size: 20px;
-   color: #fff;
 }
 
 main div.photo_window{

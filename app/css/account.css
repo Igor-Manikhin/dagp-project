@@ -1,20 +1,3 @@
-.account{
-	background-color: #fff;
-}
-
-.nav-item{
-	padding: 5px;
-}
-.nav-link{
-	text-align: center;
-	color:#fff !important;
-}
-
-.nav-acc > .nav-item.active > .nav-link{
-	background-color: #fff;
-	color: #4a8ee3 !important;
-}
-
 .nav-acc > .nav-item > .nav-link:hover{
 	background-color: #fff;
 	color: #4a8ee3 !important;

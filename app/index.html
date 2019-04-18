@@ -38,19 +38,19 @@
 		   <div class="collapse navbar-collapse justify-content-center" id="List">
 		       <ul class="navbar-nav">
 			       <li ng-class="{'active': isActive('/')}" class="nav-item">
-				      <a class="nav-link" href="/">Главная</a>
+				      <a class="nav-link text-light" href="/">Главная</a>
 			       </li>
 			       <li ng-class="{'active': isActive('/determination')}" class="nav-item">
-				      <a class="nav-link" href="/determination">Определение возраста и пола</a>
+				      <a class="nav-link text-light" href="/determination">Определение возраста и пола</a>
 			       </li>
 			       <li class="nav-item">
-				      <a class="nav-link" ng-click="about()" href="#about">О сайте</a>
+				      <a class="nav-link text-light" ng-click="about()" href="#about">О сайте</a>
 			       </li>
 			       <li id="autoriz" ng-class="{'active': isActive('/autorization')}" class="nav-item">
-				      <a class="nav-link" href="/autorization">Войти в личный аккаунт</a>
+				      <a class="nav-link text-light" href="/autorization">Войти в личный аккаунт</a>
 			       </li>
 			       <li id="account" ng-class="{'active': isActive('/account/profile')}" class="nav-item" style="display: none;">
-				      <a class="nav-link" href="/account/profile">Просмотр аккаунта</a>
+				      <a class="nav-link text-light" href="/account/profile">Просмотр аккаунта</a>
 			       </li>
 		       </ul>
 	        </div>
@@ -59,7 +59,7 @@
 	<main ng-view>
 	</main>
 	<footer>
-		<div class="block_1">
+		<div class="block_1" style="background-color: #4a8ee3; opacity: 0.8;">
 			<div class="container-fluid">
 			  <div class="row py-3 px-lg-3 align-items-center justify-content-around justify-content-lg-between">
 			  	<ul class="nav">
@@ -79,13 +79,13 @@
 						</a>	
 					</li>
 				  </ul>
-				  <a href="/support" class="nav-link">Тех.поддержка</a>
+				  <a href="/support" class="nav-link text-white">Тех.поддержка</a>
 			  </div>	  	
 			</div>
 		  </div>
-		  <div class="block_2">
+		  <div class="block_2" style="background-color: #4a8ee3;">
 		  	<div class="container-fluid">
-		  		<div class="row py-2 align-items-lg-center justify-content-center justify-content-lg-center">
+		  		<div class="row py-2 align-items-lg-center justify-content-center justify-content-lg-center text-white">
 		  			<span>© 2018-2019 Все права защищены, DAGP</span>
 		  		</div>
 		  	</div>

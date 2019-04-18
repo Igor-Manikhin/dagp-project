@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
-.navbar-nav > .nav-item.active > .nav-link{
+ul.navbar-nav li.nav-item.active a.nav-link{
+	color: white !important;
 	border-bottom: 1.5px solid white;
 }
 
@@ -14,11 +15,8 @@
 	font-family: 'PT Sans', sans-serif; 
 }
 
-ul.navbar-nav li.nav-item a.nav-link{
+ul.navbar-nav li.nav-item a.nav-link:hover{
 	color: white !important;
-}
-
-.navbar-nav > .nav-item > .nav-link:hover{
 	border-bottom: 1.5px solid white;
 }
 
@@ -28,28 +26,10 @@ ul.navbar-nav li.nav-item a.nav-link{
 }
 
 footer{
-	color: #fff;
 	font-family: 'PT Sans', sans-serif;
 }
 
-footer div.block_1{
-	background-color: #4a8ee3;
-	opacity: 0.8;
-}
-
-footer div.block_1 a.nav-link{
-	color: white;
-	float:right;
-	font-size: 15px;
-}
-
-footer div.block_2{
-	background-color: #4a8ee3;
-	text-align: center;
-}
-
 main div.support_page{
-	background-color: #fff;
 	min-height: 100vh;
 	max-height: 850px;
 }

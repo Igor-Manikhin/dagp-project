@@ -21,8 +21,6 @@ main div.main{
 }
 
 #text_about{
-	color: black;
-    background: white;
     font-family: 'PT Sans', sans-serif;
     font-size: 20px;
 }
@@ -36,12 +34,11 @@ main div.main{
     -o-background-size: cover;
 	background-size: cover;
 	font-family: 'PT Sans', sans-serif;
-	color: black;
 	font-size: 23px;
 }
 
 .technologies{
-	background: white;
+	background-color: white;
 	font-family: 'PT Sans', sans-serif;
 	text-align: center;
 }
@@ -49,7 +46,6 @@ main div.main{
 .technologies a{
 	transition: all 1s;
 }
-
 
 .technologies a:hover{
 	-webkit-transform: scale(1.2);

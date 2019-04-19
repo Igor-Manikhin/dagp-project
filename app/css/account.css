@@ -3,6 +3,11 @@
 	color: #4a8ee3 !important;
 }
 
+#history_empty{
+  height: 350px;
+  background-color: grey;
+}
+
 .file {
   position: relative;
   overflow: hidden;
@@ -41,4 +46,16 @@
    .account{
       min-height: 900px;
    }
+  
+   .card-img-top{
+      height: 200px;
+      width: 200px;
+   }
+
+   .images_history{
+      height: 90px;
+      width: 90px;
+   }
+
+
 }

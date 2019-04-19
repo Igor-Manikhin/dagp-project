@@ -20,7 +20,6 @@ myApp.service('user', function(){
     } 
     
     this.saveData = function(data){
-
         localStorage.setItem("login", JSON.stringify({
             root_admin: data.root_admin,
             user_id: data.token
@@ -104,7 +103,7 @@ myApp.controller("registrController", function($scope, $location, $http){
         var form = document.getElementById("form");
         var data = {};
 
-        if (form.checkValidity() == false) {
+        if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
                 username_feedback.text(base_text_feedback);
@@ -122,15 +121,23 @@ myApp.controller("registrController", function($scope, $location, $http){
 
             form.classList.remove("was-validated");
             $http.post("http://localhost:3000/registration", data).then(function (result) {
-                    if(result.data.check_username == false){
+                    if(!result.data.check_username){
                         username_input.addClass('is-invalid');
                         username_feedback.text("Данное имя пользователя уже занято");
                     }
-                    if(result.data.check_email == false){
+                    else{
+                        username_input.removeClass('is-invalid');
+                    }
+
+                    if(!result.data.check_email){
                         email_input.addClass('is-invalid');
                         email_feedback.text("Данный адрес электронной почты уже занят")
                     }
-                    if(result.data.reg == true){
+                    else{
+                        email_input.removeClass('is-invalid');
+                    }
+
+                    if(result.data.reg){
                           $scope.message = true;
                     }    
             });
@@ -143,7 +150,7 @@ myApp.controller("recoveryController", function($scope){
     $scope.recovery = function(event){
          var form = document.getElementById("form");
 
-         if (form.checkValidity() == false) {
+         if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
          }
@@ -162,7 +169,7 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
         var form = document.getElementById("needs-validation");
         var path = user.isCurrentURL();
 
-        if (form.checkValidity() == false) {
+        if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
                 form.classList.add("was-validated");
@@ -225,7 +232,7 @@ myApp.controller("profileController", function($scope, $http, user){
 });
 
 myApp.controller("showHisrotyController", function($scope, $http, user){
-
+    
     $scope.nav_account = {page: 2};
 
     $http.get("http://localhost:3000/getHistoryUser/"+user.getIdCurrentUser()).then(function(result){
@@ -247,7 +254,7 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
         var form = document.getElementById("needs-validation");
         var data = {};
         
-        if(form.checkValidity() == false){
+        if(!form.checkValidity()){
             event.preventDefault();
             event.stopPropagation();
             form.classList.add("was-validated");
@@ -264,6 +271,7 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
 
 myApp.controller("changeDataController", function($scope, $http, user){
     $scope.nav_account = {page: 4};
+
     $scope.showBlock = function(arg){
         $scope.link = arg;
     }

@@ -1,4 +1,4 @@
-<div class="account bg-light" style="height: 100vh;">
+<div class="account bg-light" style="min-height: 100vh;">
 			<div class="container-custom">
 				<div class="row justify-content-center justify-content-lg-around align-items-lg-start my-5 my-lg-1 pt-lg-5">
 					<div class="col-md-5 col-lg-3" ng-controller="AccountMemuCtl">
@@ -25,11 +25,13 @@
 							<h5>Профиль пользователя</h5>
 						</div>
 						<div class="row justify-content-center justify-content-lg-around py-lg-3 pt-2" style="background-color: #e6e6e6;">
-							<div class="d-flex flex-column col-10 col-lg-4 mr-lg-3">
+							<div class="d-flex flex-column col-12 col-lg-4 mr-lg-3">
 								<div class="card px-lg-2 pt-2">
-  									<img class="card-img-top" ng-src="{{photoURL}}" alt="Card image cap" width="250" height="250">
+									<div class="d-flex justify-content-center">
+										<img class="card-img-top" ng-src="{{photoURL}}" alt="Avatar" width="250" height="250">
+									</div>
   									<div class="card-body">
-										<a class="btn btn-primary btn-block text-light" data-toggle="modal" data-target="#exampleModal">Редактировать</a>
+										<a class="btn btn-primary d-block text-light" data-toggle="modal" data-target="#exampleModal">Редактировать</a>
   									</div>
 								</div>
 								<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -56,7 +58,7 @@
 								  </div>
 								</div>
 							</div>
-							<div class="col-10 col-lg-6 my-2">
+							<div class="col-12 col-lg-6 my-2 my-lg-0">
 								<ul class="list-group list-group-flush">
 									<li class="list-group-item">Имя пользователя: {{username}}</li>
 									<li class="list-group-item">
@@ -73,10 +75,10 @@
 							<h5>История распознаваний</h5>
 						</div>
 						<div class="row py-lg-3">
-							<div class="d-flex col-12 col-lg-12 justify-content-lg-center align-items-lg-center" ng-hide="history_determ">
+							<div class="d-flex col-12 col-lg-12 justify-content-lg-center align-items-center align-items-lg-center text-center" ng-hide="history_determ" id="history_empty">
 								<h4>История распознаваний пустая</h4>
 							</div>
-							<div class="col-12 col-lg-12" ng-show="history_determ" style="height: 350px; overflow-y: scroll;">
+							<div class="d-flex col-12 col-lg-12 justify-content-center" ng-show="history_determ" style="height: 350px; overflow-y: scroll;">
 								<table class="table table-hover">
 									<thead style="text-align: center;">
 										<tr>
@@ -89,15 +91,15 @@
 										<tr>
 										   <th style="text-align: center;">{{$index + 1}}</th>
 										   <td>
-										   	 <div class="d-flex justify-content-lg-center">
+										   	 <div class="d-flex justify-content-lg-center text-center text-lg-left">
 										   	 	Возраст: {{history_id.age_determ}} лет<br>
 										   	  	Пол: {{history_id.gender_determ}}<br>
 										   	  	Возрастная группа: {{history_id.age_group_determ}}
 										   	 </div>
 										   </td>
 										   <td>
-										   	 <div class="d-flex justify-content-lg-center">
-										   	 	<img ng-src="{{history_id.photo_used_determ}}" alt="" width="150" height="150">
+										   	 <div class="d-flex justify-content-center justify-content-lg-center">
+										   	 	<img class="images_history" ng-src="{{history_id.photo_used_determ}}" alt="" width="150" height="150">
 										   	 </div>
 										   </td>
 										</tr>

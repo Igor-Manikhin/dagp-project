@@ -157,6 +157,9 @@ app.post("/registration", function(req, res){
 
 			if(result.rows.length > 0){
 				feedback_info.reg = false;
+				feedback_info.check_username = true;
+				feedback_info.check_email = true;
+
 				for(var i = 0; i < result.rows.length; i++){
 					if(result.rows[i].username == body.username){
 						feedback_info.check_username = false;
@@ -200,7 +203,6 @@ app.post("/registration", function(req, res){
 app.post("/autorization", function(req, res) {
 	var body = req.body;
 	var json = {}; 
-    json.root_admin = false;
 
 	pool.connect(function(err, client, done){
 		if(err){

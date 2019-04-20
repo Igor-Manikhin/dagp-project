@@ -1,15 +1,16 @@
 // Required Modules
 var express    = require('express');
+const { check, validationResult } = require('express-validator/check');
 var jwt        = require('jsonwebtoken');
 var pg         = require('pg');
 var file       = require('fs');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var hbs        = require('nodemailer-handlebars');
-var app        = express();
-const { check, validationResult } = require('express-validator/check'); 
+var app        = express(); 
 
 var port = process.env.PORT || 3000;
+
 
 //Публичный и приватные ключи
 var publicKey = file.readFileSync('Security_Keys/rsa-public-key.pem');

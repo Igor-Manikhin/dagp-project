@@ -163,29 +163,62 @@ myApp.controller("recoveryController", function($scope){
 });
 
 myApp.controller("autorizController", function($scope, $location, $http, user){
+
+    var username = angular.element(document.querySelector('#username'));
+    var password = angular.element(document.querySelector('#password'));
+    var validation_feedback = angular.element(document.querySelector('#validation-feedback'));
+
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $scope.show_mode = false;
+            username.removeClass('is-invalid');
+            password.removeClass('is-invalid');
+        }
+    }
     
     $scope.loggIn = function(event){
         
         var form = document.getElementById("needs-validation");
         var path = user.isCurrentURL();
+        var data = {};
+        $scope.show_mode = false;
 
-        if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-                form.classList.add("was-validated");
-        }
-        else{
-                var data = {
-                    username: $scope.username,
-                    password: $scope.password
-                };
-                $http.post("http://localhost:3000/autorization", data).then(function (result) {
-                    if(result.data.loggedIn == true){
-                        user.saveData(result.data);
-                        $location.path(path);    
-                    }
-                });
-        }
+        data.username = $scope.username;
+        data.password =  $scope.password;
+
+        $http.post("http://localhost:3000/autorization", data).then(function(result){
+            if(result.data.loggedIn == true){
+                user.saveData(result.data);
+                $location.path(path);    
+            }
+        }, function(result){
+            var errors = result.data.errors;
+            if(errors.username && errors.password){
+                username.addClass('is-invalid');
+                password.addClass('is-invalid');
+                $scope.show_mode = true;
+                return validation_feedback.text("Введите имя пользователя и пароль");
+            }
+
+            if(errors.username){
+                username.addClass('is-invalid');
+                $scope.show_mode = true;
+                validation_feedback.text(errors.username.msg);
+            }
+
+            if(errors.password){
+                password.addClass('is-invalid');
+                $scope.show_mode = true;
+                validation_feedback.text(errors.password.msg);
+            }
+
+            if(errors.data_message_error){
+                username.addClass('is-invalid');
+                password.addClass('is-invalid');
+                $scope.show_mode = true;
+                validation_feedback.text(errors.data_message_error.msg);
+            }
+        });
     }
 });
 

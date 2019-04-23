@@ -6,14 +6,15 @@
 					  	<h3>Вход в личный аккаунт</h3><br>
 			  	 		<div class="form-group">
 			  	 			<div class="col-12 col-lg-12">
-			  	 				<input type="text" ng-model="username" class="form-control" name="text" placeholder="Имя пользователя или электронная почта" required>
+			  	 				<input id="username" type="text" ng-model="username" ng-keyup="input_check($event)" class="form-control" name="text" placeholder="Имя пользователя или адрес электронной почты" required>
 			  	 			</div>
 			  	 		</div>
 			  	 		<div class="form-group">
 			  	 			<div class="col-12 col-lg-12">
-			  	 				<input type="password" ng-model="password" class="form-control" name="password" placeholder="Пароль" required>
+			  	 				<input id="password" type="password" ng-model="password" ng-keyup="input_check($event)" class="form-control" name="password" placeholder="Пароль" required>
 			  	 			</div>	
 			  	 		</div>
+			  	 		<div id="validation-feedback" class="alert py-0 py-lg-0 text-danger" ng-show="show_mode == true"></div>
 			  	 	  	<button ng-click="loggIn($event)" class="btn btn-primary">Войти</button><br><br>
 			  	 	  	<a href="/recovery" style="text-decoration: none;">Забыли пароль?</a>
 					  </div>

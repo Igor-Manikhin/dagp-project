@@ -201,10 +201,19 @@ app.post("/registration", function(req, res){
 	});
 })
 
-app.post("/autorization", function(req, res) {
+app.post("/autorization",[
+		check('username', 'Имя пользователя не должно быть пустым').exists().not().isEmpty(),
+		check('username', 'Неверно введён адрес электронной почты').isEmail(),
+		check('password', 'Пароль не должен быть пустым').exists().not().isEmpty()
+	], function(req, res) {
+	const errors = validationResult(req);
 	var body = req.body;
-	var json = {}; 
+	var json = {};
 
+	if (!errors.isEmpty()) {
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+ 
 	pool.connect(function(err, client, done){
 		if(err){
 			return console.log("Error!");
@@ -224,6 +233,9 @@ app.post("/autorization", function(req, res) {
 					json.token = token;
 					
 					res.send(json);
+				}
+				else{
+					res.status(422).json({errors: {data_message_error: {msg:"Неверное имя пользователя или пароль"}}});
 				}
 		})
 	})

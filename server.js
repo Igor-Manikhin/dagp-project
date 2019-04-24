@@ -1,12 +1,13 @@
 // Required Modules
 var express    = require('express');
-const { check, validationResult } = require('express-validator/check');
+const { check, oneOf, validationResult } = require('express-validator/check');
 var jwt        = require('jsonwebtoken');
 var pg         = require('pg');
 var file       = require('fs');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var hbs        = require('nodemailer-handlebars');
+var moment     = require('moment');
 var app        = express(); 
 
 var port = process.env.PORT || 3000;
@@ -28,6 +29,9 @@ var pool = new pg.Pool(config);
 
 //Скрываем информацию об ПО, на котором был написан сервер
 app.disable('x-powered-by');
+
+//locale russian language
+moment.locale('ru');
 
 app.use('/media', express.static(__dirname + "/media"));
 app.use(express.static(__dirname + "/app"));
@@ -110,7 +114,7 @@ app.get('/getUserInfo/:id', function(req, res){
  	 				data.username = result.rows[0].username;
  	 				data.photoURL = result.rows[0].photo;
  	 				data.Email    = result.rows[0].email;
- 	 				data.date_birth = result.rows[0].date_birth;
+ 	 				data.date_birth = moment(result.rows[0].date_birth).format("DD MMMM YYYY г.");
  	 				data.city = result.rows[0].city;
  	 				res.send(data);
  	 			}
@@ -141,10 +145,33 @@ app.get('/getHistoryUser/:id', function(req, res){
 	});
 })
 
-app.post("/registration", function(req, res){	
+app.post("/registration", [
+		check('username')
+			.exists().withMessage('Укажите имя пользователя')
+			.not().isEmpty().withMessage('Укажите имя пользователя')
+			.matches("^[A-Za-z0-9А-Яа-я]+$").withMessage('Имя пользователя содержит недопустимые символы'),
+		check('email')
+			.exists().withMessage('Укажите адрес электронной почты')
+			.not().isEmpty().withMessage('Укажите адрес электронной почты')
+			.isEmail().withMessage('Неверно указан адрес электронной почты')
+			.normalizeEmail(),
+		check('date')
+			.exists().withMessage('Укажите дату рождения')
+			.not().isEmpty().withMessage('Укажите дату рождения')
+			.isISO8601().withMessage('Дата рождения указана неверно'),
+		check('city', "Укажите город")
+			.exists().withMessage('Укажите город')
+			.not().isEmpty().withMessage('Укажите город'),
+		check('password', "Укажите пароль").exists().not().isEmpty(),
+	], function(req, res){
+	var errors = validationResult(req);
+	var success = {};	
 	var body = req.body;
 	var file_path = 'media/Standart-image.png';
-	var feedback_info = {};
+
+	if (!errors.isEmpty()) {
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
 
 	pool.connect(function(err, client, done){
 		if(err){
@@ -157,20 +184,19 @@ app.post("/registration", function(req, res){
 			};
 
 			if(result.rows.length > 0){
-				feedback_info.reg = false;
-				feedback_info.check_username = true;
-				feedback_info.check_email = true;
+				errors = {};
+				errors.reg = false;
 
 				for(var i = 0; i < result.rows.length; i++){
 					if(result.rows[i].username == body.username){
-						feedback_info.check_username = false;
+						errors.username = {msg: "Указанное имя пользователя уже занято"};
 					}
 					if(result.rows[i].email == body.email){
-						feedback_info.check_email = false;
+						errors.email = {msg: "На указанный адрес электронной почты уже зарегистрирован аккаунт"};
 					}
 				}
 				done();
-				return res.send(feedback_info);
+				return res.status(422).send({errors: errors});
 			}
 
 			file.mkdirSync("media/" + body.username); 
@@ -185,35 +211,39 @@ app.post("/registration", function(req, res){
 			};
 
 			client.query("INSERT INTO users (username, password, email, photo, date_birth, city) VALUES ($1, $2, $3, $4, $5, $6);", 
-			[body.username, body.password, body.email, file_path, body.date, body.city], function(err, result){
+			[body.username, body.password, body.email, file_path, moment(body.date).format("YYYY-MM-DD"), body.city], function(err, result){
 				if(err){
 					console.log(err);
 					return console.log("Bad request!");
 				}
 				done();
 
-				feedback_info.reg = true;
-				feedback_info.check_username = true;
-				feedback_info.check_email = true;
-				res.send(feedback_info);
+				success.reg = true;
+				success.check_username = true;
+				success.check_email = true;
+				res.send(success);
 			});
 		});
 	});
 })
 
-app.post("/autorization",[
-		check('username', 'Имя пользователя не должно быть пустым').exists().not().isEmpty(),
-		check('username', 'Неверно введён адрес электронной почты').isEmail(),
-		check('password', 'Пароль не должен быть пустым').exists().not().isEmpty()
+app.post("/autorization", [
+		check('username')
+			.exists().withMessage('Введите имя пользователя<br>(или адрес электронной почты)')
+			.not().isEmpty().withMessage('Введите имя пользователя<br>(или адрес электронной почты)')
+			.matches('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)|(^[A-Za-z0-9А-Яа-я]+$)').withMessage('Поле содержит недопустимые символы'),
+		check('password')
+			.exists().withMessage('Введите пароль')
+			.not().isEmpty().withMessage('Введите пароль')
 	], function(req, res) {
 	const errors = validationResult(req);
 	var body = req.body;
 	var json = {};
 
-	if (!errors.isEmpty()) {
+	if(!errors.isEmpty()){
     	return res.status(422).json({errors: errors.mapped()});
   	}
- 
+
 	pool.connect(function(err, client, done){
 		if(err){
 			return console.log("Error!");
@@ -235,7 +265,7 @@ app.post("/autorization",[
 					res.send(json);
 				}
 				else{
-					res.status(422).json({errors: {data_message_error: {msg:"Неверное имя пользователя или пароль"}}});
+					res.status(422).json({errors: {data_message_error: {msg:"Неверное имя пользователя<br>(адрес электронной почты) или пароль"}}});
 				}
 		})
 	})

@@ -74,10 +74,16 @@ myApp.controller("mainController", function($scope){
 });
 
 myApp.controller("registrController", function($scope, $location, $http){
-    
     var path;
     var type_file;
     $scope.message = false;
+
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $scope.show_mode = false;
+            $(event.target).removeClass('is-invalid');
+        }
+    }
 
     $scope.readURL = function(input) {
         if (input.files && input.files[0]) {
@@ -95,53 +101,32 @@ myApp.controller("registrController", function($scope, $location, $http){
 
     $scope.registr = function(event){
         
-        var username_input = angular.element(document.querySelector('#Username'));
-        var username_feedback = angular.element(document.querySelector('#feedback-username'));
-        var email_input = angular.element(document.querySelector('#Email'));
-        var email_feedback = angular.element(document.querySelector('#feedback-email'));
-        var base_text_feedback = "Данное поле обязательно для заполнения";
-        var form = document.getElementById("form");
         var data = {};
+        data.username = $scope.username;
+        data.email    = $scope.email;
+        data.photoURL = path;
+        data.type_file= type_file;
+        data.date     = $scope.date;   
+        data.city     = $scope.city;
+        data.password = $scope.password;
 
-        if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-                username_feedback.text(base_text_feedback);
-                email_feedback.text(base_text_feedback);
-                form.classList.add("was-validated");
-        }
-        else{
-            data.username = $scope.username;
-            data.email    = $scope.email;
-            data.photoURL = path;
-            data.type_file= type_file;
-            data.date     = moment($scope.date).format("YYYY-MM-DD");
-            data.city     = $scope.city;
-            data.password = $scope.password;
+        form.classList.remove("was-validated");
+        $http.post("http://localhost:3000/registration", data).then(function Success(result) {
+            console.log(result.data);
+            if(result.data.reg){
+                $scope.message = true;
+            }    
+        }, function Error(result){
+            var errors = result.data.errors;
+            console.log(result.data.errors);
 
-            form.classList.remove("was-validated");
-            $http.post("http://localhost:3000/registration", data).then(function (result) {
-                    if(!result.data.check_username){
-                        username_input.addClass('is-invalid');
-                        username_feedback.text("Данное имя пользователя уже занято");
-                    }
-                    else{
-                        username_input.removeClass('is-invalid');
-                    }
-
-                    if(!result.data.check_email){
-                        email_input.addClass('is-invalid');
-                        email_feedback.text("Данный адрес электронной почты уже занят")
-                    }
-                    else{
-                        email_input.removeClass('is-invalid');
-                    }
-
-                    if(result.data.reg){
-                          $scope.message = true;
-                    }    
-            });
-        }
+            for(property in errors){
+                if(errors[property]){
+                    angular.element(document.querySelector('#'+property)).addClass('is-invalid');
+                    angular.element(document.querySelector('#feedback-'+property)).text(errors[property].msg);
+                }
+            }
+        });
     }
 });
 
@@ -193,30 +178,27 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
             }
         }, function(result){
             var errors = result.data.errors;
-            if(errors.username && errors.password){
-                username.addClass('is-invalid');
-                password.addClass('is-invalid');
-                $scope.show_mode = true;
-                return validation_feedback.text("Введите имя пользователя и пароль");
-            }
+            var count_errors = 0;
+            $scope.show_mode = true;
 
-            if(errors.username){
-                username.addClass('is-invalid');
-                $scope.show_mode = true;
-                validation_feedback.text(errors.username.msg);
-            }
-
-            if(errors.password){
-                password.addClass('is-invalid');
-                $scope.show_mode = true;
-                validation_feedback.text(errors.password.msg);
-            }
-
-            if(errors.data_message_error){
-                username.addClass('is-invalid');
-                password.addClass('is-invalid');
-                $scope.show_mode = true;
-                validation_feedback.text(errors.data_message_error.msg);
+            for(error in errors){
+                if(errors[error].value == undefined){
+                    if(error == "data_message_error"){
+                        username.addClass('is-invalid');
+                        password.addClass('is-invalid');
+                        return validation_feedback.html(errors.data_message_error.msg);
+                    }
+                    angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                    validation_feedback.html(errors[error].msg);
+                    count_errors++;
+                }
+                if(errors[error].value != undefined){
+                    angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                    return validation_feedback.html(errors[error].msg);
+                }
+                if(count_errors == 2){
+                    validation_feedback.html("Введите имя пользователя<br>(или адрес электронной почты) и пароль");
+                }
             }
         });
     }
@@ -231,7 +213,6 @@ myApp.controller("AccountMemuCtl", function($scope, user){
 myApp.controller("profileController", function($scope, $http, user){
    
    $scope.nav_account = {page: 1};
-   moment.locale('ru');
 
    $scope.readURL = function(input) {
         var data = {};
@@ -259,7 +240,7 @@ myApp.controller("profileController", function($scope, $http, user){
         $scope.photoURL = result.data.photoURL;
         $scope.username = result.data.username;
         $scope.Email    = result.data.Email;
-        $scope.Date     = moment(result.data.date_birth).format("DD MMMM YYYY г.");
+        $scope.Date     = result.data.date_birth;
         $scope.City     = result.data.city;
     });
 });

@@ -5,21 +5,23 @@
          				<form role="form" class="px-3 py-1 px-lg-3 py-lg-3" id="form" style="background-color: #fff;" novalidate>
          					<div class="form-group">
     							<label for="Username">Имя пользователя</label>
-    							<input type="text" class="form-control" id="Username" ng-model="username" placeholder="Введите имя пользователя" required>
+    							<input type="text" class="form-control" id="username" ng-model="username" ng-keyup="input_check($event)" placeholder="Введите имя пользователя" required>
                   <div class="invalid-feedback" id="feedback-username"></div>
   							</div>
   							<div class="form-group">
     							<label for="Email">Адрес электронной почты</label>
-    							<input type="email" class="form-control" id="Email" ng-model="email" placeholder="Введите адрес электронной почты" required>
+    							<input type="text" class="form-control" id="email" ng-model="email" ng-keyup="input_check($event)" placeholder="Введите адрес электронной почты" required>
                   <div class="invalid-feedback" id="feedback-email"></div>
   							</div>
   							<div class="form-group">
     							<label for="Date">Дата рождения</label>
-    							<input type="date" class="form-control" id="Date" ng-model="date" placeholder="Введите дату рождения" required>
+    							<input type="date" class="form-control" id="date" ng-model="date" ng-click="input_check($event)" placeholder="Введите дату рождения" required>
+                  <div class="invalid-feedback" id="feedback-date"></div>
   							</div>
                 <div class="form-group">
                   <label for="City">Город</label>
-                  <input type="text" class="form-control" id="City" ng-model="city" placeholder="Введите название вашего города" required>
+                  <input type="text" class="form-control" id="city" ng-model="city" ng-keyup="input_check($event)" placeholder="Введите название вашего города" required>
+                  <div class="invalid-feedback" id="feedback-city"></div>
                 </div>
   							<div class="form-group">
   								<h6>Фотография</h6>
@@ -30,10 +32,8 @@
   							</div>
   							<div class="form-group">
     							<label for="Password">Пароль</label>
-    							<input type="password" class="form-control" id="Password" ng-model="password" placeholder="Введите пароль" required>
-                  <div class="invalid-feedback">
-                      Данное поле обязательно для заполнения
-                  </div>
+    							<input type="password" class="form-control" id="password" ng-model="password" ng-keyup="input_check($event)" placeholder="Введите пароль" required>
+                  <div class="invalid-feedback" id="feedback-password"></div>
   							</div>
   							<div class="form-group d-flex justify-content-center">
   								<button ng-click="registr($event)" class="btn btn-primary">Зарегистрироваться</button>

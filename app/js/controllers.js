@@ -80,7 +80,6 @@ myApp.controller("registrController", function($scope, $location, $http){
 
     $scope.input_check = function(event){
         if($(event.target).value != ""){
-            $scope.show_mode = false;
             $(event.target).removeClass('is-invalid');
         }
     }
@@ -112,7 +111,6 @@ myApp.controller("registrController", function($scope, $location, $http){
 
         form.classList.remove("was-validated");
         $http.post("http://localhost:3000/registration", data).then(function Success(result) {
-            console.log(result.data);
             if(result.data.reg){
                 $scope.message = true;
             }    
@@ -151,7 +149,7 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
 
     var username = angular.element(document.querySelector('#username'));
     var password = angular.element(document.querySelector('#password'));
-    var validation_feedback = angular.element(document.querySelector('#validation-feedback'));
+    var validation_feedback = angular.element(document.querySelector('#invalid-feedback'));
 
     $scope.input_check = function(event){
         if($(event.target).value != ""){
@@ -166,7 +164,6 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
         var form = document.getElementById("needs-validation");
         var path = user.isCurrentURL();
         var data = {};
-        $scope.show_mode = false;
 
         data.username = $scope.username;
         data.password =  $scope.password;
@@ -236,11 +233,11 @@ myApp.controller("profileController", function($scope, $http, user){
         }
     };
 
-    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
+    $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){
         $scope.photoURL = result.data.photoURL;
         $scope.username = result.data.username;
         $scope.Email    = result.data.Email;
-        $scope.Date     = result.data.date_birth;
+        $scope.Date     = new Date(result.data.date_birth).toLocaleString("ru", {year: 'numeric', month: 'long', day: 'numeric'});
         $scope.City     = result.data.city;
     });
 });
@@ -260,127 +257,161 @@ myApp.controller("showHisrotyController", function($scope, $http, user){
 myApp.controller("changePasswordsUsers", function($scope, $http, user){
     $scope.nav_account = {page: 3};
 
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $(event.target).removeClass('is-invalid');
+        }
+    }
+
     $http.get("http://localhost:3000/getListUsers/"+user.getIdCurrentUser()).then(function(result){
         $scope.usernames = result.data;
     });
 
     $scope.changeUserPassword = function(){
-        var form = document.getElementById("needs-validation");
         var data = {};
         
-        if(!form.checkValidity()){
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-        }
-        else{
-            data.user_id = user.getIdCurrentUser();
-            data.username = $scope.selectedUsername;
-            data.newUserPassword = $scope.newUserPassword;
+        data.user_id = user.getIdCurrentUser();
+        data.username = $scope.selectedUsername;
+        data.password = $scope.newUserPassword;
 
-            $http.put("http://localhost:3000/changeUserPassword", data);
-        }
+        $http.put("http://localhost:3000/changeUserPassword", data).then(function(result){
+
+        }, function(result){
+            var errors = result.data.errors;
+            for(error in errors){
+                if(errors[error]){
+                    angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                    angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+                }
+            }
+        });
     }
 })
 
 myApp.controller("changeDataController", function($scope, $http, user){
     $scope.nav_account = {page: 4};
 
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $(event.target).removeClass('is-invalid');
+        }
+    }
+
     $scope.showBlock = function(arg){
         $scope.link = arg;
     }
 
     $scope.hideBlock = function(arg){
-        var form = document.getElementById("needs-validation"+arg);
-        form.classList.remove("was-validated");
+        var feedbacks = document.getElementsByClassName('input');
+        for(var i = 0; i < feedbacks.length; i++){
+            feedbacks[i].classList.remove("is-invalid");
+        }
+
         if(arg == 1){
             $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
                 $scope.username = result.data.username;
-                $scope.date_birth = new Date(moment(result.data.date_birth));
+                $scope.date_birth = new Date(result.data.date_birth);
                 $scope.city = result.data.city;
             });
         }
+        if(arg == 2){
+            $scope.email = "";
+        }
+        if(arg == 3){
+            $scope.password = "";
+        }
+
         $scope.link = 0;
     }
 
     $scope.updateUserInfo = function(){
-        var form = document.getElementById("needs-validation1");
         var data = {};
 
-        if (form.checkValidity() == false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-        }
-        else{
-            data.user_id = user.getIdCurrentUser();
-            data.username = $scope.username;
-            data.date_birth = moment($scope.date_birth).format("YYYY-MM-DD");
-            data.city = $scope.city; 
-            $http.put("http://localhost:3000/account/updateUserInfo", data);
-        }
+        data.user_id = user.getIdCurrentUser();
+        data.username = $scope.username;
+        data.date_birth = $scope.date_birth;
+        data.city = $scope.city; 
+        $http.put("http://localhost:3000/account/updateUserInfo", data).then(function(result){
+
+        }, function(result){
+            var errors = result.data.errors;
+
+            for(error in errors){
+                if(errors[error]){
+                    angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                    angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+                }
+            }
+        });
     }
 
     $scope.savePassword = function(){
-        var form = document.getElementById("needs-validation3");
         var data = {};
 
-        if (form.checkValidity() == false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-        }
-        else{
-            data.user_id = user.getIdCurrentUser();
-            data.password = $scope.password; 
-            $http.put("http://localhost:3000/account/change-password", data);
-        }
+        data.user_id = user.getIdCurrentUser();
+        data.password = $scope.password; 
+        $http.put("http://localhost:3000/account/change-password", data).then(function(result){
+
+        }, function(result){
+            var errors = result.data.errors;
+            for(error in errors){
+                angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+            }
+        });
     }
 
     $scope.saveEmail = function(){
-        var form = document.getElementById("needs-validation2");
         var data = {};
-        if (form.checkValidity() == false) {
-            event.preventDefault();
-            event.stopPropagation();
-            form.classList.add("was-validated");
-        }
-        else{
-            data.user_id = user.getIdCurrentUser();
-            data.email = $scope.email; 
-            $http.put("http://localhost:3000/account/change-email", data)
-        }
+        
+        data.user_id = user.getIdCurrentUser();
+        data.email = $scope.email; 
+        $http.put("http://localhost:3000/account/change-email", data).then(function(result){
+
+        }, function(result){
+            var errors = result.data.errors;
+            for(error in errors){
+                angular.element(document.querySelector('#email')).addClass('is-invalid');
+                angular.element(document.querySelector('#feedback-email')).text(errors[error].msg);
+            }
+        })
     }
 
     $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 
         $scope.username = result.data.username;
-        $scope.date_birth = new Date(moment(result.data.date_birth));
+        $scope.date_birth = new Date(result.data.date_birth);
         $scope.city = result.data.city;
     });
 })
 
 myApp.controller("supportController", function($scope, $http){
 
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $(event.target).removeClass('is-invalid');
+        }
+    }
+
     $scope.sendSupport = function(event){
-        var form = document.getElementById("needs-validation");
+        var data = {};
 
-        if (form.checkValidity() == false) {
-                event.preventDefault();
-                event.stopPropagation();
-        }
-        else{
-            var data = {
-                    username: $scope.username,
-                    email: $scope.email,
-                    typeProblem: $scope.type_problem,
-                    problem: $scope.problem
+        data.username = $scope.username;
+        data.email = $scope.email;
+        data.type_problem = $scope.type_problem;
+        data.description_problem = $scope.problem;
 
+        $http.post("http://localhost:3000/support", data).then(function(result){
+            console.log(result.data);
+        }, function(result){
+            var errors = result.data.errors;
+            console.log(errors);
+            for(error in errors){
+                if(errors[error]){
+                    angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                    angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+                }
             }
-            $http.post("http://localhost:3000/support", data).then(function(result){
-                console.log(result.data);
-            })
-        }
-        form.classList.add("was-validated");
+        })
     }
 });
 

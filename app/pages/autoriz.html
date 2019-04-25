@@ -1,20 +1,20 @@
 <div class="main">
 			<div class="container">
 				<div class="row justify-content-center align-items-center" style="height: 100vh;">
-					<form role="form" class="form-horizontal px-3" name="AutorizForm" id="needs-validation" novalidate>
+					<form role="form" class="form-horizontal px-3" name="AutorizForm" id="needs-validation">
 					  <div class="part py-lg-3">
 					  	<h3>Вход в личный аккаунт</h3><br>
 			  	 		<div class="form-group">
 			  	 			<div class="col-12 col-lg-12">
-			  	 				<input id="username" type="text" ng-model="username" ng-keyup="input_check($event)" class="form-control" name="text" placeholder="Имя пользователя или адрес электронной почты" required>
+			  	 				<input id="username" type="text" ng-model="username" ng-keyup="input_check($event)" class="form-control" name="text" placeholder="Имя пользователя или адрес электронной почты">
 			  	 			</div>
 			  	 		</div>
 			  	 		<div class="form-group">
 			  	 			<div class="col-12 col-lg-12">
-			  	 				<input id="password" type="password" ng-model="password" ng-keyup="input_check($event)" class="form-control" name="password" placeholder="Пароль" required>
+			  	 				<input id="password" type="password" ng-model="password" ng-keyup="input_check($event)" class="form-control" name="password" placeholder="Пароль">
 			  	 			</div>	
 			  	 		</div>
-			  	 		<div id="validation-feedback" class="alert py-0 py-lg-0 text-danger" ng-show="show_mode == true"></div>
+			  	 		<div id="invalid-feedback" class="alert py-0 py-lg-0 text-danger" ng-show="show_mode == true"></div>
 			  	 	  	<button ng-click="loggIn($event)" class="btn btn-primary">Войти</button><br><br>
 			  	 	  	<a href="/recovery" style="text-decoration: none;">Забыли пароль?</a>
 					  </div>

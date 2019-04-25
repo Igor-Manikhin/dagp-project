@@ -1,6 +1,6 @@
 // Required Modules
 var express    = require('express');
-const { check, oneOf, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator/check');
 var jwt        = require('jsonwebtoken');
 var pg         = require('pg');
 var file       = require('fs');
@@ -57,7 +57,7 @@ app.get('/getListUsers/:id', function(req, res){
 			if(err){
 				return console.log("Error!");
 			};
-			client.query("SELECT * FROM users", function(err, result){
+			client.query("SELECT username FROM users", function(err, result){
 				if(err){
 					return console.log("Bad request!");
 				};
@@ -105,7 +105,7 @@ app.get('/getUserInfo/:id', function(req, res){
  	 		if(err){
  	 			return console.log("Error!");
  	 		}
- 	 		client.query("SELECT * FROM users WHERE id = $1;", [decoded.id], function(err, result){
+ 	 		client.query("SELECT username, photo, email, date_birth, city FROM users WHERE id = $1;", [decoded.id], function(err, result){
  	 			if(err){
  	 				return console.log("Bad request!");
  	 			}
@@ -114,7 +114,7 @@ app.get('/getUserInfo/:id', function(req, res){
  	 				data.username = result.rows[0].username;
  	 				data.photoURL = result.rows[0].photo;
  	 				data.Email    = result.rows[0].email;
- 	 				data.date_birth = moment(result.rows[0].date_birth).format("DD MMMM YYYY г.");
+ 	 				data.date_birth = result.rows[0].date_birth;
  	 				data.city = result.rows[0].city;
  	 				res.send(data);
  	 			}
@@ -159,10 +159,17 @@ app.post("/registration", [
 			.exists().withMessage('Укажите дату рождения')
 			.not().isEmpty().withMessage('Укажите дату рождения')
 			.isISO8601().withMessage('Дата рождения указана неверно'),
-		check('city', "Укажите город")
+		check('city')
 			.exists().withMessage('Укажите город')
-			.not().isEmpty().withMessage('Укажите город'),
-		check('password', "Укажите пароль").exists().not().isEmpty(),
+			.not().isEmpty().withMessage('Укажите город')
+			.isAlpha('ru-RU').withMessage('Нзавание города должно включать в себя только буквы русского алфавита')
+			.isLength({min:3}).withMessage('Название города не соответствует минимальной длине (минимум 3 символа)')
+			.isLength({max:20}).withMessage('Название города превышает максимальную длину (максимум 20 символов)'),
+		check('password')
+			.exists().withMessage('Укажите пароль')
+			.not().isEmpty().withMessage('Укажите пароль')
+			.isAlphanumeric().withMessage('Пароль содержит недопустимые символы')
+			.isLength({min:5}).withMessage('Длина пароля должна быть не менее 5-ти символов'),
 	], function(req, res){
 	var errors = validationResult(req);
 	var success = {};	
@@ -178,7 +185,7 @@ app.post("/registration", [
 			return console.log("Error!");
 		}
 
-		client.query("SELECT * FROM users WHERE username = $1 OR email = $2", [body.username, body.email], function(err, result){
+		client.query("SELECT username, email FROM users WHERE username = $1 OR email = $2", [body.username, body.email], function(err, result){
 			if(err){
 				return console.log("Bad request!");
 			};
@@ -189,7 +196,7 @@ app.post("/registration", [
 
 				for(var i = 0; i < result.rows.length; i++){
 					if(result.rows[i].username == body.username){
-						errors.username = {msg: "Указанное имя пользователя уже занято"};
+						errors.username = {msg: "Введённое имя пользователя уже занято"};
 					}
 					if(result.rows[i].email == body.email){
 						errors.email = {msg: "На указанный адрес электронной почты уже зарегистрирован аккаунт"};
@@ -248,12 +255,13 @@ app.post("/autorization", [
 		if(err){
 			return console.log("Error!");
 		}
-		client.query("SELECT * FROM users WHERE (username=$1 OR email=$1) AND password=$2;",
+		client.query("SELECT id, username, password FROM users WHERE (username=$1 OR email=$1) AND password=$2;",
 			[body.username, body.password], function(err, result){
 			   	if(err){
 					return console.log("Bad request!");
 				}
 				done();
+				
 				if(result.rows.length > 0){
 					var token = jwt.sign({ id: result.rows[0].id, username: result.rows[0].username }, privateKey, {algorithm: 'RS256'});
 					if(result.rows[0].id == 106){
@@ -298,8 +306,29 @@ app.post("/saveDataHistory", function(req, res){
 	})
 })
 
-app.post("/support", function(req, res){
+app.post("/support", [
+		check('username')
+			.exists().withMessage('Укажите имя пользователя')
+			.not().isEmpty().withMessage('Укажите имя пользователя')
+			.matches("^[A-Za-z0-9А-Яа-я]+$").withMessage('Имя пользователя содержит недопустимые символы'),
+		check('email')
+			.exists().withMessage('Укажите адрес электронной почты')
+			.not().isEmpty().withMessage('Укажите адрес электронной почты')
+			.isEmail().withMessage('Неверно указан адрес электронной почты')
+			.normalizeEmail(),
+		check('type_problem')
+			.exists().withMessage("Выберите тип проблемы")
+			.not().isEmpty().withMessage("Выберите тип проблемы"),
+		check('description_problem')
+			.exists().withMessage('Не указано описание проблемы')
+			.not().isEmpty().withMessage('Не указано описание проблемы')
+	], function(req, res){
+	const errors = validationResult(req);
 	var body = req.body;
+
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
 
 	pool.connect(function(err, client, done){
 		if(err){
@@ -329,7 +358,7 @@ app.post("/support", function(req, res){
 					var mailToUser = {
   							from: 'support@dagp.ru',
   							to: body.email,
-  							subject: 'Фиксация проблемы веб-сервиса' + " <"+body.typeProblem+">",
+  							subject: 'Фиксация проблемы веб-сервиса' + " <"+body.type_problem+">",
   							template: 'index',
   							context: {
   								username: body.username
@@ -339,9 +368,9 @@ app.post("/support", function(req, res){
 					var mailToAdmin = {
 						from: 'support@dagp.ru',
 						to: 'i.manihin@dagp.ru',
-						subject: 'Фиксация проблемы веб-сервиса' + " <"+body.typeProblem+">",
+						subject: 'Фиксация проблемы веб-сервиса' + " <"+body.type_problem+">",
 						html: 'Пользователь '+body.username+' обнаружил проблему в работоспособности веб-сервиса, связанную с '+
-						'\"'+body.typeProblem+'\".'+'<br><br>'+'Ниже привидено описание проблемы:'+'<br>'+body.problem
+						'\"'+body.type_problem+'\".'+'<br><br>'+'Ниже привидено описание проблемы:'+'<br>'+body.description_problem
 					}
 
 					transporter.sendMail(mailToUser);
@@ -351,48 +380,126 @@ app.post("/support", function(req, res){
 	})
 });
 
-app.put("/account/updateUserInfo", function(req, res){
+app.put("/account/updateUserInfo", [
+		check('username')
+			.exists().withMessage('Укажите имя пользователя')
+			.not().isEmpty().withMessage('Укажите имя пользователя')
+			.matches("^[A-Za-z0-9А-Яа-я]+$").withMessage('Имя пользователя содержит недопустимые символы'),
+		check('date_birth')
+			.exists().withMessage('Укажите дату рождения')
+			.not().isEmpty().withMessage('Укажите дату рождения')
+			.isISO8601().withMessage('Дата рождения указана неверно'),
+		check('city')
+			.exists().withMessage('Укажите город')
+			.not().isEmpty().withMessage('Укажите город')
+			.isAlpha('ru-RU').withMessage('Нзавание города должно включать в себя только буквы русского алфавита')
+			.isLength({min:3}).withMessage('Название города не соответствует минимальной длине (минимум 3 символа)')
+			.isLength({max:20}).withMessage('Название города превышает максимальную длину (максимум 20 символов)')
+	], function(req, res){
+	const errors = validationResult(req);
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
 
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+
 	pool.connect(function(err, client, done){
-		client.query("UPDATE users SET username=$1, date_birth=$2, city=$3 WHERE id=$4", [body.username, body.date_birth, body.city, decoded.id],
-		function(err, result){
+		client.query("SELECT username FROM users WHERE username=$1", [body.username], function(err, result){
 			if(err){
 				return console.log("Bad request!");
 			}
-			done();
+
+			if(result.rows.length > 0 && decoded.username != body.username){
+				done();
+				return res.status(422).json({errors: {username: {msg:"Введённое имя пользователя уже занято"}}})
+			}
+
+			client.query("UPDATE users SET username=$1, date_birth=$2, city=$3 WHERE id=$4", [body.username, moment(body.date_birth).format("YYYY-MM-DD"), 
+			body.city, decoded.id],function(err, result){
+				if(err){
+					return console.log("Bad request!");
+				}
+				done();
+			})
 		})
 	})
 })
 
-app.put("/account/change-email", function(req, res){
+app.put("/account/change-email", [
+		check('email')
+			.exists().withMessage('Укажите адрес электронной почты')
+			.not().isEmpty().withMessage('Укажите адрес электронной почты')
+			.isEmail().withMessage('Неверно указан адрес электронной почты')
+			.normalizeEmail()
+	], function(req, res){
+	const errors = validationResult(req);
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
 
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+
 	pool.connect(function(err, client, done){
-		client.query("UPDATE users SET email=$1 WHERE id=$2", [body.email, decoded.id], function(err, result){
+		client.query("SELECT email FROM users WHERE email=$1", [body.email], function(err, result){
 			if(err){
 				return console.log("Bad request!");
 			}
-			done();
+			if(result.rows.length > 0){
+				done();
+				return res.status(422).json({errors: {data_message_error: {msg:"Введённый адрес электронной почты уже занят"}}})
+			}
+
+			client.query("UPDATE users SET email=$1 WHERE id=$2", [body.email, decoded.id], function(err, result){
+				if(err){
+					return console.log("Bad request!");
+				}
+				done();
+			})
 		})
 	})
 })
 
-app.put("/account/change-password", function(req, res){
+app.put("/account/change-password", [
+		check('password')
+			.exists().withMessage('Укажите пароль')
+			.not().isEmpty().withMessage('Укажите пароль')
+			.isAlphanumeric().withMessage('Введённый пароль содержит недопустимые символы')
+			.isLength({min:5}).withMessage('Длина пароля должна быть не менее 5-ти символов')
+	], function(req, res){
+	const errors = validationResult(req);
 	var body = req.body;
 	var token = body.user_id;
 	var decoded = jwt.verify(token, publicKey);
+
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+
 	console.log("User id: "+decoded.id);
 	console.log("New password: "+body.password);
 })
 
-app.put("/changeUserPassword", function(req, res){
+app.put("/changeUserPassword", [
+		check('username')
+			.exists().withMessage('Выберите пользователя')
+			.not().isEmpty().withMessage('Выберите пользователя'),
+		check('password')
+			.exists().withMessage('Введите новый пароль для пользователя')
+			.not().isEmpty().withMessage('Введите новый пароль для пользователя')
+			.isAlphanumeric().withMessage('Введённый пароль содержит недопустимые символы')
+			.isLength({min:5}).withMessage('Длина пароля должна быть не менее 5-ти символов')
+	], function(req, res){
+	const errors = validationResult(req);
 	var body = req.body;
 	var token = body.user_id;
+
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
 
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err){
@@ -408,7 +515,7 @@ app.put("/changeUserPassword", function(req, res){
 				return console.log("Error!");
 			}
 
-			client.query("UPDATE users SET password=$1 WHERE username=$2", [body.newUserPassword, body.username], function(err){
+			client.query("UPDATE users SET password=$1 WHERE username=$2", [body.password, body.username], function(err){
 				if(err){
 					return console.log("Bad request!");
 				}

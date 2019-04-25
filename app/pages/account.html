@@ -114,25 +114,21 @@
 						</div>
 						<div class="row py-lg-3 justify-content-lg-start">
 							<div class="col-12 col-lg-11">
-								<form role="form" id="needs-validation" novalidate>
+								<form role="form" id="needs-validation">
 									<div class="form-group row">
 										<label for="username" class="col-lg-3 col-form-label">Имя пользователя</label>
 										<div class="col-lg-5">
-							  				<select class="form-control" ng-options="username for username in usernames" ng-model="$parent.selectedUsername" required>
+							  				<select class="form-control" id="username" ng-options="username for username in usernames" ng-model="$parent.selectedUsername" ng-click="input_check($event)">
 							  					<option value="">Выберите пользователя</option>
 							  				</select>
-							  				<div class="invalid-feedback">
-							  					Не выбран пользователь, для которого будет изменяться пароль
-							  				</div>
+							  				<div class="invalid-feedback" id="feedback-username"></div>
 							  			</div>
 									</div>
 									<div class="form-group row">
 										<label for="password" class="col-lg-3 col-form-label">Новый пароль</label>
 										<div class="col-lg-5">
-							  				<input class="form-control" id="password" type="password" ng-model="$parent.newUserPassword" required>
-							  				<div class="invalid-feedback">
-							  					Поле "Пароль" не должно быть пустым
-							  				</div>
+							  				<input class="form-control" id="password" type="password" ng-model="$parent.newUserPassword" ng-keyup="input_check($event)">
+							  				<div class="invalid-feedback" id="feedback-password"></div>
 							  				<div class="d-flex justify-content-center justify-content-lg-start">
 							  					<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="changeUserPassword()">Изменить пароль</button>
 							  				</div>
@@ -153,23 +149,26 @@
 							  			<span>Информация об пользователе</span>
 							  			<a class="float-right" href="#" ng-hide="link == 1" ng-click="showBlock(1)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 1" ng-click="hideBlock(1)">Отмена</a>
-							  			<form role="form" class="form1 mt-lg-3" id="needs-validation1" ng-show="link == 1" novalidate>
+							  			<form role="form" class="form1 mt-lg-3" id="needs-validation1" ng-show="link == 1">
 							  				<div class="form-group row">
 							  					<label for="username" class="col-lg-3 col-form-label">Имя пользователя</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="username" type="text" ng-model="$parent.username" required>
+							  						<input class="form-control input" id="username" type="text" ng-model="$parent.username" ng-keyup="input_check($event)">
+							  						<div class="invalid-feedback" id="feedback-username"></div>
 							  					</div>
 							  				</div>
 							  				<div class="form-group row">
-							  					<label for="Date" class="col-lg-3 col-form-label">Дата рождения</label>
+							  					<label for="date_birth" class="col-lg-3 col-form-label">Дата рождения</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="Date" type="date" ng-model="$parent.date_birth" required>
+							  						<input class="form-control input" id="date_birth" type="date" ng-model="$parent.date_birth" ng-click="input_check($event)">
+							  						<div class="invalid-feedback" id="feedback-date_birth"></div>
 							  					</div>
 							  				</div>
 							  				<div class="form-group row">
-							  					<label for="City" class="col-lg-3 col-form-label">Город</label>
+							  					<label for="city" class="col-lg-3 col-form-label">Город</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="City" type="text" ng-model="$parent.city" required>
+							  						<input class="form-control input" id="city" type="text" ng-model="$parent.city" ng-keyup="input_check($event)">
+							  						<div class="invalid-feedback" id="feedback-city"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
 							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo()">Сохранить изменения</button>
 							  						</div>
@@ -181,11 +180,12 @@
 							  			<span>Адрес электронной почты</span>
 							  			<a class="float-right" href="#" ng-hide="link == 2" ng-click="showBlock(2)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 2" ng-click="hideBlock(2)">Отмена</a>
-							  			<form role="form" class="form-horizontal form2 mt-lg-3" id="needs-validation2" ng-show="link == 2" novalidate>
+							  			<form role="form" class="form-horizontal form2 mt-lg-3" id="needs-validation2" ng-show="link == 2">
 							  				<div class="form-group row">
-							  					<label for="Email" class="col-lg-3 col-form-label">Новый адрес</label>
+							  					<label for="email" class="col-lg-3 col-form-label">Новый адрес</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="Email" type="email" ng-model="$parent.email" required>
+							  						<input class="form-control input" id="email" type="text" ng-model="$parent.email" ng-keyup="input_check($event)">
+							  						<div class="invalid-feedback" id="feedback-email"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
 							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="saveEmail()">Сохранить адрес</button>
 							  						</div>
@@ -197,11 +197,12 @@
 							  			<span>Пароль</span>
 							  			<a class="float-right" href="#" ng-hide="link == 3" ng-click="showBlock(3)">Изменить</a>
 							  			<a class="float-right" href="#" ng-show="link == 3" ng-click="hideBlock(3)">Отмена</a>
-							  			<form role="form" class="form-horizontal form3 mt-lg-3" id="needs-validation3" ng-show="link == 3" novalidate>
+							  			<form role="form" class="form-horizontal form3 mt-lg-3" id="needs-validation3" ng-show="link == 3">
 							  				<div class="form-group row">
 							  					<label for="password" class="col-lg-3 col-form-label">Новый пароль</label>
 							  					<div class="col-lg-5">
-							  						<input class="form-control" id="password" type="password" ng-model="$parent.password" required>
+							  						<input class="form-control input" id="password" type="password" ng-model="$parent.password" ng-keyup="input_check($event)">
+							  						<div class="invalid-feedback" id="feedback-password"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
 							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="savePassword()">Сохранить пароль</button>
 							  						</div>

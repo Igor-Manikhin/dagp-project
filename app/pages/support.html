@@ -2,34 +2,38 @@
          	<div class="container pt-lg-5 pt-xl-5">
          		<div class="row mt-3 pt-lg-5 pt-xl-5 mt-lg-0 mt-xl-0 justify-content-lg-around">
          			<div class="col-lg-5 col-xl-5 order-12 order-lg-1">
-         				<form class="border border-dark support mb-5 pt-3 pt-lg-3" id="needs-validation" novalidate>
+         				<form class="border border-dark support mb-5 pt-3 pt-lg-3" id="needs-validation">
          					<div class="form-group">
          						<label class="pl-3 pl-lg-3" for="username">Имя пользователя</label>
          						<div class="col-lg-12">
-         							<input type="text" class="form-control" id="username" ng-model="username" placeholder="Введите имя пользователя" required>
+         							<input type="text" class="form-control" id="username" ng-model="username" ng-keyup="input_check($event)" placeholder="Введите имя пользователя">
+                              <div class="invalid-feedback" id="feedback-username"></div>
          						</div>
          					</div>
          					<div class="form-group">
          						<label class="pl-3 pl-lg-3" for="email_adress">Адрес электронной почты</label>
          						<div class="col-lg-12">
-         							<input type="email" class="form-control" id="email_adress" ng-model="email" placeholder="Введите адрес электронной почты" required>
+         							<input type="text" class="form-control" id="email" ng-model="email" ng-keyup="input_check($event)" placeholder="Введите адрес электронной почты">
+                              <div class="invalid-feedback" id="feedback-email"></div>
          						</div>
          					</div>
          					<div class="form-group">
          						<label class="pl-3 pl-lg-3" for="select_problem">Выберите тип проблемы</label>
          						<div class="col-lg-12">
-         							<select class="form-control" id="select_problem" ng-model="type_problem" required>
-         								<option>Выберите тип проблемы</option>
+         							<select class="form-control" id="type_problem" ng-model="type_problem" ng-click="input_check($event)">
+         								<option selected value="">Выберите тип проблемы</option>
          								<option>Распознавание возраста и пола</option>
          								<option>Функционал веб-сервиса</option>
          								<option>Другая проблема</option>
          							</select>
+                              <div class="invalid-feedback" id="feedback-type_problem"></div>
          						</div>
          					</div>
          					<div class="form-group">
          						<label class="pl-3 pl-lg-3" for="discription_problem">Описание проблемы</label>
          						<div class="col-lg-12">
-         							<textarea class="form-control" id="discription_problem" ng-model="problem" rows="3" style="resize: none;" required></textarea>
+         							<textarea class="form-control" id="description_problem" ng-model="problem" ng-keyup="input_check($event)" rows="3" style="resize: none;"></textarea>
+                              <div class="invalid-feedback" id="feedback-description_problem"></div>
          						</div>
          					</div>
          					<div class="form-group">

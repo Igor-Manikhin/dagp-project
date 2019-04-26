@@ -31,24 +31,24 @@
                   <span class="navbar-toggler-icon"></span>
            </button>
 		   <a class="navbar-brand py-0 mr-0" href="/">
-			       <img src="css\images\Логотип.png" alt="Logo" style="width: 75px; height:75px;">
+			    <img src="css\images\Логотип.png" alt="Logo" style="width: 75px; height:75px;">
 		   </a>
 		   <div class="collapse navbar-collapse justify-content-center" id="List">
 		       <ul class="navbar-nav">
 			       <li ng-class="{'active': isActive('/')}" class="nav-item">
-				      <a class="nav-link text-light" href="/">Главная</a>
+				      <a class="nav-link" href="/">Главная</a>
 			       </li>
 			       <li ng-class="{'active': isActive('/determination')}" class="nav-item">
-				      <a class="nav-link text-light" href="/determination">Определение возраста и пола</a>
+				      <a class="nav-link" href="/determination">Определение возраста и пола</a>
 			       </li>
 			       <li class="nav-item">
-				      <a class="nav-link text-light" ng-click="about()" href="#about">О сайте</a>
+				      <a class="nav-link" ng-click="about()" href="#about">О сайте</a>
 			       </li>
 			       <li id="autoriz" ng-class="{'active': isActive('/autorization')}" class="nav-item">
-				      <a class="nav-link text-light" href="/autorization">Войти в личный аккаунт</a>
+				      <a class="nav-link" href="/autorization">Войти в личный аккаунт</a>
 			       </li>
-			       <li id="account" ng-class="{'active': isActive('/account/profile')}" class="nav-item" style="display: none;">
-				      <a class="nav-link text-light" href="/account/profile">Просмотр аккаунта</a>
+			       <li id="account" ng-class="{'active': isActive('/account/profile')}" class="d-none nav-item">
+				      <a class="nav-link" href="/account/profile">Просмотр аккаунта</a>
 			       </li>
 		       </ul>
 	        </div>

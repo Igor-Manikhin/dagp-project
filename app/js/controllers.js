@@ -12,8 +12,8 @@ myApp.service('user', function(){
         if(localStorage.getItem("login")){
             loggedIn = true;
 
-            autoriz.css("display", "none");
-            account.css("display", "inline");
+            autoriz.addClass("d-none");
+            account.removeClass("d-none");
         }
 
         return loggedIn;
@@ -54,8 +54,8 @@ myApp.service('user', function(){
 
         loggedIn = false;
 
-        autoriz.css("display", "inline");
-        account.css("display", "none");
+        autoriz.removeClass("d-none");
+        account.addClass("d-none");
     }
 
     this.currentURL = function(url){
@@ -161,7 +161,6 @@ myApp.controller("autorizController", function($scope, $location, $http, user){
     
     $scope.loggIn = function(event){
         
-        var form = document.getElementById("needs-validation");
         var path = user.isCurrentURL();
         var data = {};
 

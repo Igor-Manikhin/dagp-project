@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=PT+Sans');
 
 ul.navbar-nav li.nav-item.active a.nav-link{
-	color: white !important;
 	border-bottom: 1.5px solid white;
+	margin-bottom: -1.5px;
 }
 
 .nav_brands > .nav-item > .nav-link{
@@ -16,8 +16,8 @@ ul.navbar-nav li.nav-item.active a.nav-link{
 }
 
 ul.navbar-nav li.nav-item a.nav-link:hover{
-	color: white !important;
 	border-bottom: 1.5px solid white;
+	margin-bottom: -1.5px;
 }
 
 .part{ 

@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator/check');
 var jwt        = require('jsonwebtoken');
 var pg         = require('pg');
 var file       = require('fs');
+var email      = require('./email-send');
 var bodyParser = require('body-parser');
 var nodemailer = require('nodemailer');
 var hbs        = require('nodemailer-handlebars');
@@ -341,40 +342,8 @@ app.post("/support", [
 				}
 				done();
 				if(result.rows.length > 0){
-					var transporter = nodemailer.createTransport({
-							host: 'smtp.mail.ru',
-							secure: true,
-  							auth: {
-    								user: 'support@dagp.ru',
-    								pass: 'Cronos1123'
-  							}
-					});
-
-					transporter.use('compile', hbs({
-    						viewEngine: 'express-handlebars',
-    						viewPath: 'app/views_mail'
-					}));
-
-					var mailToUser = {
-  							from: 'support@dagp.ru',
-  							to: body.email,
-  							subject: 'Фиксация проблемы веб-сервиса' + " <"+body.type_problem+">",
-  							template: 'index',
-  							context: {
-  								username: body.username
-  							}
-					};
-
-					var mailToAdmin = {
-						from: 'support@dagp.ru',
-						to: 'i.manihin@dagp.ru',
-						subject: 'Фиксация проблемы веб-сервиса' + " <"+body.type_problem+">",
-						html: 'Пользователь '+body.username+' обнаружил проблему в работоспособности веб-сервиса, связанную с '+
-						'\"'+body.type_problem+'\".'+'<br><br>'+'Ниже привидено описание проблемы:'+'<br>'+body.description_problem
-					}
-
-					transporter.sendMail(mailToUser);
-					transporter.sendMail(mailToAdmin);
+					var send_emails = new email(body.username, body.email, body.type_problem, body.description_problem);
+					send_emails.sendMails();
 				}
 			})
 	})

@@ -6,8 +6,6 @@ var pg         = require('pg');
 var file       = require('fs');
 var email      = require('./email-send');
 var bodyParser = require('body-parser');
-var nodemailer = require('nodemailer');
-var hbs        = require('nodemailer-handlebars');
 var moment     = require('moment');
 var app        = express(); 
 

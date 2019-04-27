@@ -287,8 +287,24 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
     }
 })
 
-myApp.controller("changeDataController", function($scope, $http, user){
+myApp.controller("showUsersStatistics", function($scope){
     $scope.nav_account = {page: 4};
+    
+    $scope.data = [
+            {label: "one", value: 12.2, color: "red"}, 
+            {label: "two", value: 45, color: "#00ff00"},
+            {label: "three", value: 10, color: "rgb(0, 0, 255)"}
+    ];
+
+    /*$scope.gauge_data = [
+            {label: "CPU", value: 75, suffix: "%", color: "steelblue"}
+    ];*/
+
+    $scope.options = {thickness: 10};
+})
+
+myApp.controller("changeDataController", function($scope, $http, user){
+    $scope.nav_account = {page: 5};
 
     $scope.input_check = function(event){
         if($(event.target).value != ""){
@@ -323,14 +339,23 @@ myApp.controller("changeDataController", function($scope, $http, user){
         $scope.link = 0;
     }
 
-    $scope.updateUserInfo = function(){
+    $scope.updateUserInfo = function(arg, url){
         var data = {};
-
         data.user_id = user.getIdCurrentUser();
-        data.username = $scope.username;
-        data.date_birth = $scope.date_birth;
-        data.city = $scope.city; 
-        $http.put("http://localhost:3000/account/updateUserInfo", data).then(function(result){
+
+        if(arg == 1){
+            data.username = $scope.username;
+            data.date_birth = $scope.date_birth;
+            data.city = $scope.city; 
+        }
+        if(arg == 2){
+            data.email = $scope.email;     
+        }
+        if(arg == 3){
+            data.password = $scope.password;    
+        }
+
+        $http.put("http://localhost:3000/account" + url, data).then(function(result){
 
         }, function(result){
             var errors = result.data.errors;
@@ -342,38 +367,6 @@ myApp.controller("changeDataController", function($scope, $http, user){
                 }
             }
         });
-    }
-
-    $scope.savePassword = function(){
-        var data = {};
-
-        data.user_id = user.getIdCurrentUser();
-        data.password = $scope.password; 
-        $http.put("http://localhost:3000/account/change-password", data).then(function(result){
-
-        }, function(result){
-            var errors = result.data.errors;
-            for(error in errors){
-                angular.element(document.querySelector('#'+error)).addClass('is-invalid');
-                angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
-            }
-        });
-    }
-
-    $scope.saveEmail = function(){
-        var data = {};
-        
-        data.user_id = user.getIdCurrentUser();
-        data.email = $scope.email; 
-        $http.put("http://localhost:3000/account/change-email", data).then(function(result){
-
-        }, function(result){
-            var errors = result.data.errors;
-            for(error in errors){
-                angular.element(document.querySelector('#email')).addClass('is-invalid');
-                angular.element(document.querySelector('#feedback-email')).text(errors[error].msg);
-            }
-        })
     }
 
     $http.get("http://localhost:3000/getUserInfo/"+user.getIdCurrentUser()).then(function(result){ 

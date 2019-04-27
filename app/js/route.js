@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
+var myApp = angular.module('myApp', ['ngRoute', 'ngCookies', 'n3-pie-chart'])
    .config(function($routeProvider, $httpProvider, $locationProvider){
 
     $routeProvider
@@ -100,6 +100,27 @@ var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
         },
         templateUrl: "../pages/account.html",
         controller: "changePasswordsUsers"
+    })
+
+    .when('/account/showUsersStatistics', {
+        resolve: {
+            check:  function($location, $http, user){
+                        if(!user.isUserLoggedIn()){
+                            user.currentURL($location.path());
+                            $location.path("/autorization");
+                        }
+                        if(localStorage.getItem("login")){
+                            $http.get("http://localhost:3000/check/"+user.getIdCurrentUser()).then(function(result){
+                                if(!result.data.answer){
+                                    user.clearData();
+                                    $location.path("/autorization");
+                                }
+                            })
+                        }
+                    },
+        },
+        templateUrl: "../pages/account.html",
+        controller: "showUsersStatistics"
     })
 
     .when('/account/change-data', {

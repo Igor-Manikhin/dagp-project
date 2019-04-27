@@ -9,11 +9,14 @@
   							<li class="nav-item py-lg-1">
     							<a class="nav-link text-light" href="/account/history-determ">История распознаваний</a>
   							</li>
+  							<li class="nav-item py-lg-1">
+    							<a class="nav-link text-light" href="/account/change-data">Изменить данные профиля</a>
+  							</li>
   							<li class="nav-item py-lg-1" ng-if="access == true">
     							<a class="nav-link text-light" href="/account/changePasswordsUsers">Изменение паролей пользователей</a>
   							</li>
-  							<li class="nav-item py-lg-1">
-    							<a class="nav-link text-light" href="/account/change-data">Изменить данные профиля</a>
+  							<li class="nav-item py-lg-1" ng-if="access == true">
+  								<a href="/account/showUsersStatistics" class="nav-link text-light">Статистика посещаемости пользователей</a>
   							</li>
   							<li class="nav-item py-lg-1">
     							<a class="nav-link text-light" href="/logout">Выйти из аккаунта</a>
@@ -60,7 +63,7 @@
 							</div>
 							<div class="col-12 col-lg-6 my-2 my-lg-0">
 								<ul class="list-group list-group-flush">
-									<li class="list-group-item">Имя пользователя: {{username}}</li>
+									<li class="list-group-item">{{username}}</li>
 									<li class="list-group-item">
 										<span>Город: {{City}}</span><br>
 										<span>Email: {{Email}}</span><br>
@@ -140,6 +143,24 @@
 					</div>
 					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 4">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
+							<h5>Ститистика посещаемости пользователей</h5>
+						</div>
+						<div class="row py-lg-3 justify-content-lg-start">
+							<div class="col-12 col-lg-6">
+								<pie-chart data="data" options="options"></pie-chart>
+							</div>
+							<div class="d-flex col-lg-5 justify-content-lg-center">
+								<div class="col-lg-9">
+									<div class="d-flex form-group row justify-content-center justify-content-lg-start">
+										<select class="form-control" id=""></select>
+										<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm">Показать статистику пользователя</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 5">
+						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>Изменение данных профиля</h5>
 						</div>
 						<div class="row py-lg-3 justify-content-lg-start">
@@ -170,7 +191,7 @@
 							  						<input class="form-control input" id="city" type="text" ng-model="$parent.city" ng-keyup="input_check($event)">
 							  						<div class="invalid-feedback" id="feedback-city"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
-							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo()">Сохранить изменения</button>
+							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo(1, '/updateUserInfo')">Сохранить изменения</button>
 							  						</div>
 							  					</div>
 							  				</div>
@@ -187,7 +208,7 @@
 							  						<input class="form-control input" id="email" type="text" ng-model="$parent.email" ng-keyup="input_check($event)">
 							  						<div class="invalid-feedback" id="feedback-email"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
-							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="saveEmail()">Сохранить адрес</button>
+							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo(2, '/change-email')">Сохранить адрес</button>
 							  						</div>
 							  					</div>
 							  				</div>
@@ -204,7 +225,7 @@
 							  						<input class="form-control input" id="password" type="password" ng-model="$parent.password" ng-keyup="input_check($event)">
 							  						<div class="invalid-feedback" id="feedback-password"></div>
 							  						<div class="d-flex justify-content-center justify-content-lg-start">
-							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="savePassword()">Сохранить пароль</button>
+							  							<button type="button" class="mt-2 mt-lg-2 btn btn-primary btn-sm" ng-click="updateUserInfo(3, '/change-password')">Сохранить пароль</button>
 							  						</div>
 							  					</div>
 							  				</div>

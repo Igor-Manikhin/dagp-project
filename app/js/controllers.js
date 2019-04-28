@@ -287,20 +287,72 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
     }
 })
 
-myApp.controller("showUsersStatistics", function($scope){
+myApp.controller("showUsersStatistics", function($scope, $timeout){
     $scope.nav_account = {page: 4};
-    
-    $scope.data = [
-            {label: "one", value: 12.2, color: "red"}, 
-            {label: "two", value: 45, color: "#00ff00"},
-            {label: "three", value: 10, color: "rgb(0, 0, 255)"}
-    ];
 
-    /*$scope.gauge_data = [
-            {label: "CPU", value: 75, suffix: "%", color: "steelblue"}
-    ];*/
+    $scope.showUserStatistics = function(){
+        var Bar = document.getElementById('Bar').getContext('2d');
+        var Pie = document.getElementById('Pie').getContext('2d');
 
-    $scope.options = {thickness: 10};
+        var bar = new Chart(Bar, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    data: [12, 19, 5, 12],
+                    backgroundColor: ["#4a8ee3"] 
+                }],
+
+                labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Статистика пользователя'
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Даты посещения веб-сервиса"
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: "Число посещений веб-сервиса за день"
+                        },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+        var pie = new Chart(Pie, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [12, 19],
+                    backgroundColor: ["#4a8ee3"] 
+                }],
+
+                labels: ['Поcещение с момента регистрации', 'Использование функционала распознавания']
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Статистика пользователя'
+                }
+            }
+        });
+    }
 })
 
 myApp.controller("changeDataController", function($scope, $http, user){

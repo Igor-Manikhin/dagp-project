@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'ngCookies', 'n3-pie-chart'])
+var myApp = angular.module('myApp', ['ngRoute', 'ngCookies'])
    .config(function($routeProvider, $httpProvider, $locationProvider){
 
     $routeProvider

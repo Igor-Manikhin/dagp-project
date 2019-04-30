@@ -290,72 +290,94 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
 myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
     $scope.nav_account = {page: 4};
 
+    var graph = null;
+
     $http.get("http://localhost:3000/getListUsers/"+user.getIdCurrentUser()).then(function(result){
         $scope.usernames = result.data;
     });
 
     $scope.showUserStatistics = function(){
-        //var Bar = document.getElementById('Bar').getContext('2d');
-        //var Pie = document.getElementById('Pie').getContext('2d');
+        var type_graphic = angular.element(document.querySelector("#type_graphic")).val();
+        var graphic = document.getElementById('Graphic');
+        var data = {};
+        var options;
 
-        /*var bar = new Chart(Bar, {
-            type: 'bar',
-            data: {
-                datasets: [{
-                    data: [12, 19, 5, 12],
-                    backgroundColor: ["#4a8ee3"] 
-                }],
+        if(graph != null){
+            var ctx = graphic.getContext('2d');
+            ctx.clearRect(0, 0, graphic.width, graphic.height);
+            graph.destroy();
+        }
 
-                labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Статистика пользователя'
-                },
-                scales: {
-                    xAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Даты посещения веб-сервиса"
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Число посещений веб-сервиса за день"
+        data.username = $scope.selectedUsername;
+
+        if(type_graphic == 1){
+            options = {
+                    type: 'bar',
+                    data: {
+                        datasets: [{
+                            data: [12, 19, 5, 12],
+                            backgroundColor: ["#4a8ee3"] 
+                        }],
+
+                    labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
+                    },
+                    options: {
+                        legend: {
+                            display: false
                         },
-                        ticks: {
-                            beginAtZero: true
+                        title: {
+                            display: true,
+                            text: 'Статистика пользователя'
+                        },
+                        scales: {
+                            xAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Даты посещения веб-сервиса"
+                                }
+                            }],
+                            yAxes: [{
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: "Число посещений веб-сервиса за день"
+                                },
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
                         }
-                    }]
-                }
-            }
-        });*/
+                    }
+            };            
+        }
+        if(type_graphic == 2){
+            options = {
+                    type: 'doughnut',
+                    data: {
+                            datasets: [{
+                                data: [12, 19],
+                            backgroundColor: ["#4a8ee3"] 
+                            }],
 
-        /*var pie = new Chart(Pie, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [12, 19],
-                    backgroundColor: ["#4a8ee3"] 
-                }],
-
-                labels: ['Поcещение с момента регистрации', 'Использование функционала распознавания']
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: 'Статистика пользователя'
-                }
-            }
-        })*/;
+                            labels: ['Поcещение с момента регистрации', 'Использование функционала распознавания']
+                    },
+                    options: {
+                            layout: {
+                                padding: {
+                                    right: 100
+                                }
+                            },
+                            legend: {
+                                display: true,
+                                position: 'right'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Статистика пользователя'
+                            }
+                    }
+            };
+        }
+        graph = new Chart(graphic.getContext('2d'), options);
     }
 })
 

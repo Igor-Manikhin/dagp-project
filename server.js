@@ -453,7 +453,8 @@ app.put("/account/change-password", [
 app.put("/changeUserPassword", [
 		check('username')
 			.exists().withMessage('Выберите пользователя')
-			.not().isEmpty().withMessage('Выберите пользователя'),
+			.not().isEmpty().withMessage('Выберите пользователя')
+			.matches("^[A-Za-z0-9А-Яа-я]+$").withMessage('Имя пользователя содержит недопустимые символы'),
 		check('password')
 			.exists().withMessage('Введите новый пароль для пользователя')
 			.not().isEmpty().withMessage('Введите новый пароль для пользователя')

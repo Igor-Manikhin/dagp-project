@@ -287,14 +287,18 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
     }
 })
 
-myApp.controller("showUsersStatistics", function($scope, $timeout){
+myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
     $scope.nav_account = {page: 4};
 
-    $scope.showUserStatistics = function(){
-        var Bar = document.getElementById('Bar').getContext('2d');
-        var Pie = document.getElementById('Pie').getContext('2d');
+    $http.get("http://localhost:3000/getListUsers/"+user.getIdCurrentUser()).then(function(result){
+        $scope.usernames = result.data;
+    });
 
-        var bar = new Chart(Bar, {
+    $scope.showUserStatistics = function(){
+        //var Bar = document.getElementById('Bar').getContext('2d');
+        //var Pie = document.getElementById('Pie').getContext('2d');
+
+        /*var bar = new Chart(Bar, {
             type: 'bar',
             data: {
                 datasets: [{
@@ -330,9 +334,9 @@ myApp.controller("showUsersStatistics", function($scope, $timeout){
                     }]
                 }
             }
-        });
+        });*/
 
-        var pie = new Chart(Pie, {
+        /*var pie = new Chart(Pie, {
             type: 'doughnut',
             data: {
                 datasets: [{
@@ -351,7 +355,7 @@ myApp.controller("showUsersStatistics", function($scope, $timeout){
                     text: 'Статистика пользователя'
                 }
             }
-        });
+        })*/;
     }
 })
 

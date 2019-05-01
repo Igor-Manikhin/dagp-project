@@ -287,7 +287,7 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
     }
 })
 
-myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
+myApp.controller("showUsersStatistics", function($scope, $http, user){
     $scope.nav_account = {page: 4};
 
     var graph = null;
@@ -301,6 +301,7 @@ myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
         var graphic = document.getElementById('Graphic');
         var data = {};
         var options;
+        var url;
 
         if(graph != null){
             var ctx = graphic.getContext('2d');
@@ -309,17 +310,19 @@ myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
         }
 
         data.username = $scope.selectedUsername;
+        data.id       = user.getIdCurrentUser();
 
         if(type_graphic == 1){
+            url = '/getHistoryVisitsUser';
             options = {
                     type: 'bar',
                     data: {
                         datasets: [{
                             data: [12, 19, 5, 12],
-                            backgroundColor: ["#4a8ee3"] 
+                            backgroundColor: "#4a8ee3" 
                         }],
 
-                    labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
+                    //labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
                     },
                     options: {
                         legend: {
@@ -350,6 +353,7 @@ myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
             };            
         }
         if(type_graphic == 2){
+            url = '/getHistoryVisitsUser';
             options = {
                     type: 'doughnut',
                     data: {
@@ -358,7 +362,6 @@ myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
                             backgroundColor: ["#4a8ee3"] 
                             }],
 
-                            labels: ['Поcещение с момента регистрации', 'Использование функционала распознавания']
                     },
                     options: {
                             layout: {
@@ -377,7 +380,12 @@ myApp.controller("showUsersStatistics", function($scope, $http, $timeout, user){
                     }
             };
         }
-        graph = new Chart(graphic.getContext('2d'), options);
+
+        $http.post("http://localhost:3000"+url, data).then(function(result){
+            console.log(result.data);
+            options.data.labels = result.data;
+            graph = new Chart(graphic.getContext('2d'), options);
+        })
     }
 })
 

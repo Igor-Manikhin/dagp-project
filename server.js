@@ -44,12 +44,8 @@ app.get('/getListUsers/:id', function(req, res){
 	var usernames = [];
 
 	jwt.verify(token, publicKey, function(err, decoded){
-		if(err){
+		if(err || decoded.id != 106){
 			return console.log("Token is not verifyed!");
-		};
-
-		if(decoded.id != 106){
-			return console.log("Access denied!");
 		};
 
 		pool.connect(function(err, client, done){
@@ -90,7 +86,6 @@ app.get('/check/:id', function(req, res){
   		res.send(response_body);
 	 })
 });
-
 
 app.get('/getUserInfo/:id', function(req, res){
  	 var token = req.params.id;
@@ -259,7 +254,6 @@ app.post("/autorization", [
 			   	if(err){
 					return console.log("Bad request!");
 				}
-				done();
 				
 				if(result.rows.length > 0){
 					var token = jwt.sign({ id: result.rows[0].id, username: result.rows[0].username }, privateKey, {algorithm: 'RS256'});
@@ -268,8 +262,15 @@ app.post("/autorization", [
 					}
 					json.loggedIn = true;
 					json.token = token;
-					
-					res.send(json);
+
+					client.query("INSERT INTO history_visits (user_id, date_of_visit) VALUES ($1, $2)", [result.rows[0].id,
+					moment().format()], function(err, result){
+						if(err){
+							return console.log("Bad request!");
+						}
+						done();
+						res.send(json);
+					})
 				}
 				else{
 					res.status(422).json({errors: {data_message_error: {msg:"Неверное имя пользователя<br>(адрес электронной почты) или пароль"}}});
@@ -346,6 +347,45 @@ app.post("/support", [
 			})
 	})
 });
+
+app.post('/getHistoryVisitsUser', function(req, res){
+	var token = req.body.id;
+	var user  = req.body.username; 
+	var dates = [];
+
+	jwt.verify(token, publicKey, function(err, decoded){
+		if(err || decoded.id != 106){
+			return console.log("Token is not verifyed!");
+		}
+		
+		pool.connect(function(err, client, done){
+			if(err){
+				return console.log("Error!");
+			};
+
+			client.query("SELECT id FROM users WHERE username=$1", [user], function(err, result){
+				if(err){
+					return console.log("Bad request!");
+				};
+
+				if(result.rows.length > 0){
+					client.query("SELECT date_of_visit FROM history_visits WHERE user_id=$1", [result.rows[0].id], function(err, result){
+						if(err){
+							return console.log("Bad request!");
+						}
+						done();
+						for(var i = 0; i < result.rows.length; i++){
+							dates.push(result.rows[i].date_of_visit);
+						}
+						res.send(dates);
+					})
+				}
+			});
+
+		});
+
+	})
+})
 
 app.put("/account/updateUserInfo", [
 		check('username')
@@ -470,12 +510,8 @@ app.put("/changeUserPassword", [
   	}
 
 	jwt.verify(token, publicKey, function(err, decoded){
-		if(err){
+		if(err || decoded.id != 106){
 			return console.log("Token is not verifyed!");
-		}
-
-		if(decoded.id != 106){
-			return console.log("Access denied!");
 		}
 
 		pool.connect(function(err, client, done){

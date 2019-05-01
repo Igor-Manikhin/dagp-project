@@ -1,8 +1,8 @@
 <div class="account bg-light" style="min-height: 100vh;">
 			<div class="container-custom">
 				<div class="row justify-content-center justify-content-lg-around align-items-lg-start my-5 my-lg-1 pt-lg-5">
-					<div class="col-md-5 col-lg-3" ng-controller="AccountMemuCtl">
-						<ul class="nav d-flex flex-column px-lg-4 py-3 py-lg-4 nav-acc" style="background-color: #4a8ee3;" >
+					<div class="d-flex col-md-5 col-lg-3 justify-content-center justify-content-lg-center" ng-controller="AccountMemuCtl">
+						<ul class="nav flex-column px-lg-3 py-3 py-lg-4 nav-acc">
   							<li class="nav-item py-lg-1">
     							<a class="nav-link text-light" href="/account/profile">Профиль</a>
   							</li>
@@ -23,7 +23,7 @@
   							</li>
 						</ul>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 1">
+					<div class="col-11 col-lg-8 ml-lg-0" ng-if="nav_account.page == 1">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>Профиль пользователя</h5>
 						</div>
@@ -73,7 +73,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 2">
+					<div class="col-11 col-lg-8 ml-lg-0" ng-if="nav_account.page == 2">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>История распознаваний</h5>
 						</div>
@@ -111,7 +111,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 3">
+					<div class="col-11 col-lg-8 ml-lg-0" ng-if="nav_account.page == 3">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>Изменение паролей пользователей</h5>
 						</div>
@@ -142,7 +142,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 4">
+					<div class="col-11 col-lg-8 ml-lg-0" ng-if="nav_account.page == 4">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>Ститистика посещаемости пользователей</h5>
 						</div>
@@ -174,7 +174,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-11 col-lg-8 ml-lg-5" ng-if="nav_account.page == 5">
+					<div class="col-11 col-lg-8 ml-lg-0" ng-if="nav_account.page == 5">
 						<div class="row mb-lg-2 mt-lg-0 mt-5 justify-content-center justify-content-lg-start text-center">
 							<h5>Изменение данных профиля</h5>
 						</div>

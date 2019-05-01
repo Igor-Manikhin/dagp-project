@@ -1,3 +1,9 @@
+.nav-acc{
+  width: 250px;
+  background-color: #4a8ee3;
+  font-size: 14.3px;
+}
+
 .nav-acc > .nav-item > .nav-link:hover{
 	background-color: #fff;
 	color: #4a8ee3 !important;

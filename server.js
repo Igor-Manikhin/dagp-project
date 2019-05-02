@@ -212,7 +212,7 @@ app.post("/registration", [
 			};
 
 			client.query("INSERT INTO users (username, password, email, photo, date_birth, city) VALUES ($1, $2, $3, $4, $5, $6);", 
-			[body.username, body.password, body.email, file_path, moment(body.date).format("YYYY-MM-DD"), body.city], function(err, result){
+			[body.username, body.password, body.email, file_path, moment(body.date).format(), body.city], function(err, result){
 				if(err){
 					console.log(err);
 					return console.log("Bad request!");
@@ -349,9 +349,11 @@ app.post("/support", [
 });
 
 app.post('/getHistoryVisitsUser', function(req, res){
+
 	var token = req.body.id;
 	var user  = req.body.username; 
 	var dates = [];
+	var count = [];
 
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err || decoded.id != 106){
@@ -375,9 +377,21 @@ app.post('/getHistoryVisitsUser', function(req, res){
 						}
 						done();
 						for(var i = 0; i < result.rows.length; i++){
-							dates.push(result.rows[i].date_of_visit);
+							dates.push(moment(result.rows[i].date_of_visit).format('YYYY.MM.DD'));
 						}
-						res.send(dates);
+						
+						var result = dates.reduce(function(acc, el){
+							acc[el] = (acc[el] || 0) + 1;
+							return acc;
+						}, {})
+
+						dates.splice(0, dates.length);
+
+						for(key in result){
+							dates.push(key);
+							count.push(result[key]);
+						}
+						res.send({dates: dates, counts: count});
 					})
 				}
 			});

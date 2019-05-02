@@ -318,11 +318,10 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
                     type: 'bar',
                     data: {
                         datasets: [{
-                            data: [12, 19, 5, 12],
+                            fill: false,
                             backgroundColor: "#4a8ee3" 
                         }],
 
-                    //labels: ['27.02.19', '30.05.19', '31.09.19', '01.02.20']
                     },
                     options: {
                         legend: {
@@ -334,9 +333,9 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
                         },
                         scales: {
                             xAxes: [{
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: "Даты посещения веб-сервиса"
+                                ticks: {
+                                    source: 'data',
+                                    autoSkip: true
                                 }
                             }],
                             yAxes: [{
@@ -359,7 +358,7 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
                     data: {
                             datasets: [{
                                 data: [12, 19],
-                            backgroundColor: ["#4a8ee3"] 
+                                backgroundColor: ["#4a8ee3"] 
                             }],
 
                     },
@@ -383,7 +382,8 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
 
         $http.post("http://localhost:3000"+url, data).then(function(result){
             console.log(result.data);
-            options.data.labels = result.data;
+            options.data.labels = result.data.dates;
+            options.data.datasets[0].data = result.data.counts;
             graph = new Chart(graphic.getContext('2d'), options);
         })
     }

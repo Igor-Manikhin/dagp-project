@@ -309,11 +309,8 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
             graph.destroy();
         }
 
-        data.username = $scope.selectedUsername;
-        data.id       = user.getIdCurrentUser();
-
         if(type_graphic == 1){
-            url = '/getHistoryVisitsUser';
+            url = '/getHistoryVisitsUser?id=';
             options = {
                     type: 'bar',
                     data: {
@@ -329,21 +326,16 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
                         },
                         title: {
                             display: true,
-                            text: 'Статистика пользователя'
+                            text: 'Статистика пользователя '+$scope.selectedUsername
                         },
                         scales: {
-                            xAxes: [{
-                                ticks: {
-                                    source: 'data',
-                                    autoSkip: true
-                                }
-                            }],
                             yAxes: [{
                                 scaleLabel: {
                                     display: true,
                                     labelString: "Число посещений веб-сервиса за день"
                                 },
                                 ticks: {
+                                    stepSize: 1,
                                     beginAtZero: true
                                 }
                             }]
@@ -352,15 +344,15 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
             };            
         }
         if(type_graphic == 2){
-            url = '/getHistoryVisitsUser';
+            url = '/getStatisticsOfUseFunctional?id=';
             options = {
                     type: 'doughnut',
                     data: {
                             datasets: [{
-                                data: [12, 19],
-                                backgroundColor: ["#4a8ee3"] 
+                                backgroundColor: ["#4A8EE3", "#98AFC7", "#B6B6B4"],
+                                borderColor: ["#4A8EE3", "#98AFC7", "#B6B6B4"],
+                                borderWidth: 1
                             }],
-
                     },
                     options: {
                             layout: {
@@ -374,16 +366,16 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
                             },
                             title: {
                                 display: true,
-                                text: 'Статистика пользователя'
+                                text: 'Статистика пользователя '+$scope.selectedUsername
                             }
                     }
             };
         }
 
-        $http.post("http://localhost:3000"+url, data).then(function(result){
+        $http.get("http://localhost:3000"+url+user.getIdCurrentUser()+"&username="+$scope.selectedUsername).then(function(result){
             console.log(result.data);
-            options.data.labels = result.data.dates;
-            options.data.datasets[0].data = result.data.counts;
+            options.data.labels = result.data.labels;
+            options.data.datasets[0].data = result.data.data;
             graph = new Chart(graphic.getContext('2d'), options);
         })
     }

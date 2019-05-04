@@ -128,20 +128,30 @@ myApp.controller("registrController", function($scope, $location, $http){
     }
 });
 
-myApp.controller("recoveryController", function($scope){
+myApp.controller("recoveryController", function($scope, $http){
+
+    $scope.input_check = function(event){
+        if($(event.target).value != ""){
+            $(event.target).removeClass('is-invalid');
+        }
+    }
 
     $scope.recovery = function(event){
-         var form = document.getElementById("form");
+        var data = {};
+        data.email = $scope.email;
+        data.password = $scope.new_password;
 
-         if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-         }
-         else{
-                var Email = $scope.email;
-                var New_password = $scope.password;
-         }
-         form.classList.add("was-validated");
+        $http.post("http://localhost:3000/recoveryPassword", data).then(function(result){
+            console.log(result.data);
+        }, function(result){
+            var errors = result.data.errors;
+            console.log(result.data.errors);
+
+            for(error in errors){
+                angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+            }
+        })
     }
 });
 

@@ -125,3 +125,38 @@ module.exports.signin = function(req, res) {
 		})
 	})
 }
+
+module.exports.recoveryPassword = function(req, res){
+	const errors = validationResult(req);
+	var body = req.body;
+
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+
+  	pool.connect(function(err, client, done){
+  		if(err){
+			return console.log("Error!");
+		}
+
+		client.query("SELECT id, username, email FROM users WHERE email=$1;", [body.email], function(err, result){
+			if(err){
+				return console.log("Bad request!");
+			}
+
+			if(result.rows.length > 0){
+				client.query("UPDATE users SET password=$1 WHERE id=$2", [body.password, result.rows[0].id], function(err, result){
+					if(err){
+						return console.log("Bad request!");
+					}
+					done();
+					res.send({answer: true});
+				})
+			}
+			else{
+				done();
+				res.status(422).send(false);
+			}
+		})
+  	})
+}

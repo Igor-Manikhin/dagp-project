@@ -69,7 +69,18 @@ app.post("/autorization", [
 			.not().isEmpty().withMessage('Введите пароль')
 	], signup_signin.signin);
 
-app.post("/saveDataHistory", System.saveDataHistory)
+app.post("/recoveryPassword", [
+		check('email')
+			.exists().withMessage('Укажите адрес электронной почты')
+			.not().isEmpty().withMessage('Укажите адрес электронной почты')
+			.isEmail().withMessage('Неверно указан адрес электронной почты')
+			.normalizeEmail(),
+		check('password')
+			.exists().withMessage('Укажите новый пароль')
+			.not().isEmpty().withMessage('Укажите новый пароль')
+			.isAlphanumeric().withMessage('Новый пароль содержит недопустимые символы')
+			.isLength({min:5}).withMessage('Длина пароля должна быть не менее 5-ти символов')	
+], signup_signin.recoveryPassword)
 
 app.post("/support", [
 		check('username')
@@ -88,6 +99,8 @@ app.post("/support", [
 			.exists().withMessage('Не указано описание проблемы')
 			.not().isEmpty().withMessage('Не указано описание проблемы')
 	], System.support);
+
+app.post("/saveDataHistory", System.saveDataHistory)
 
 app.put("/account/updateUserInfo", [
 		check('username')

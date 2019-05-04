@@ -1,6 +1,6 @@
 <div class="support_page bg-light">
-         	<div class="container pt-lg-5 pt-xl-5">
-         		<div class="row mt-3 pt-lg-5 pt-xl-5 mt-lg-0 mt-xl-0 justify-content-lg-around">
+         	<div class="container">
+         		<div class="row mt-3 pt-lg-5 pt-xl-5 mt-lg-0 mt-xl-0 justify-content-lg-around" ng-hide="answer">
          			<div class="col-lg-5 col-xl-5 order-12 order-lg-1">
          				<form class="border border-dark support mb-5 pt-3 pt-lg-3" id="needs-validation">
          					<div class="form-group">
@@ -48,5 +48,17 @@
          					<p>Если вы заметили, что функционал веб-сервиса работает некорректно, то заполните все необходимые данные в форме для отправки нам, чтобы мы своевременно могли решить замеченную вами проблему в работоспособности веб-сервиса</p>
          			</div>
          		</div>
+               <div class="row justify-content-lg-center align-items-lg-center" ng-show="answer" style="height: 100vh;">
+                  <div class="col-lg-9">
+                     <div class="row align-items-lg-center">
+                        <div class="d-flex col-lg-6 justify-content-lg-center">
+                           <a class="btn btn-primary btn-sm" href="/">Перейти на главную страницу</a>
+                        </div>
+                        <div class="col-lg-6">
+                           <p>Информация о найденной вами проблеме отправлена в службу технической поддержки. Ожидайте ответа от одного из наших специалистов</p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
          	</div>
          </div>

@@ -142,10 +142,9 @@ myApp.controller("recoveryController", function($scope, $http){
         data.password = $scope.new_password;
 
         $http.post("http://localhost:3000/recoveryPassword", data).then(function(result){
-            console.log(result.data);
+            $scope.answer = result.data.answer; 
         }, function(result){
             var errors = result.data.errors;
-            console.log(result.data.errors);
 
             for(error in errors){
                 angular.element(document.querySelector('#'+error)).addClass('is-invalid');
@@ -481,10 +480,10 @@ myApp.controller("supportController", function($scope, $http){
         data.description_problem = $scope.problem;
 
         $http.post("http://localhost:3000/support", data).then(function(result){
-            console.log(result.data);
+            $scope.answer = result.data.answer;
         }, function(result){
             var errors = result.data.errors;
-            console.log(errors);
+
             for(error in errors){
                 if(errors[error]){
                     angular.element(document.querySelector('#'+error)).addClass('is-invalid');

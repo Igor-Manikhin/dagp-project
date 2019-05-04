@@ -94,6 +94,7 @@ module.exports.support = function(req, res){
 							return console.log("Bad request!");
 						}
 						done();
+						res.send({answer: true});
 					})
 				}
 			})

@@ -382,10 +382,15 @@ myApp.controller("showUsersStatistics", function($scope, $http, user){
         }
 
         $http.get("http://localhost:3000"+url+user.getIdCurrentUser()+"&username="+$scope.selectedUsername).then(function(result){
-            console.log(result.data);
             options.data.labels = result.data.labels;
             options.data.datasets[0].data = result.data.data;
             graph = new Chart(graphic.getContext('2d'), options);
+        }, function(result){
+            var errors = result.data.errors;
+            for(error in errors){
+                angular.element(document.querySelector('#'+error)).addClass('is-invalid');
+                angular.element(document.querySelector('#feedback-'+error)).text(errors[error].msg);
+            }
         })
     }
 })

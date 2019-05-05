@@ -75,11 +75,15 @@ module.exports.getListUsers = function(req, res){
 }
 
 module.exports.getHistoryVisitsUser = function(req, res){
-
+	const errors = validationResult(req);
 	var token = req.query.id;
 	var user  = req.query.username; 
 	var dates = [];
 	var count = [];
+
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
 
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err || decoded.id != 106){
@@ -126,11 +130,16 @@ module.exports.getHistoryVisitsUser = function(req, res){
 }
 
 module.exports.getStatisticsOfUseFunctional = function(req, res){
+	const errors = validationResult(req);
 	var token = req.query.id;
 	var username = req.query.username;
 	var data = [];
 	var labels = ["Использование функционала распознавания", "Изменение данных профиля", "Обращение в службу технической поддержки"];
 
+	if(!errors.isEmpty()){
+    	return res.status(422).json({errors: errors.mapped()});
+  	}
+	
 	jwt.verify(token, publicKey, function(err, decoded){
 		if(err || decoded.id != 106){
 			return console.log("Token is not verifyed!");

@@ -28,7 +28,12 @@ app.get('/getListUsers/:id', AdminPrivileges.getListUsers)
 app.get('/check/:id', System.check);
 app.get('/getUserInfo/:id', accountSettings.getUserInfo);
 app.get('/getHistoryUser/:id', accountSettings.getHistoryUser)
-app.get('/getHistoryVisitsUser', AdminPrivileges.getHistoryVisitsUser)
+app.get('/getHistoryVisitsUser', [
+	check('username')
+		.exists().withMessage('Укажите имя пользователя')
+		.not().isEmpty().withMessage('Укажите имя пользователя')
+		.matches("^[A-Za-z0-9А-Яа-я]+$").withMessage('Имя пользователя содержит недопустимые символы')
+], AdminPrivileges.getHistoryVisitsUser)
 app.get("/getStatisticsOfUseFunctional", AdminPrivileges.getStatisticsOfUseFunctional)
 
 

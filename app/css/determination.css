@@ -9,6 +9,7 @@
 main div.interface{
 	min-height: 100vh;
    max-height: 1200px;
+   z-index: 1;
 }
 
 main div.results{
@@ -16,7 +17,8 @@ main div.results{
 }
 
 main ul.list_results{
-   height: 250px;	
+   height: 200px;
+   width: 350px;	
    background-color: #4a8ee3;	
    list-style-type: none;
    font-size: 20px;
@@ -24,6 +26,7 @@ main ul.list_results{
 
 main div.photo_window{
    height: 400px;
+   width: 900px;
 	background-color: #bbbbbb;
    opacity: 0.5;
 	margin-top: 50px;
@@ -33,6 +36,7 @@ main div.photo_window{
    
    main div.photo_window{
       height: 200px;
+      width: 90%;
       margin-top: 35px;
       font-size: 10px;
    }
@@ -42,7 +46,8 @@ main div.photo_window{
    }
 
    main ul.list_results{
-      height: 150px;
+      height: 140px;
+      width: 90%;
       font-size: 18px;
    }
 }

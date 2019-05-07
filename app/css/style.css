@@ -28,7 +28,7 @@ footer{
 	font-family: 'PT Sans', sans-serif;
 }
 
-main div.support_page{
+main div.body_support_page{
 	min-height: 100vh;
 	max-height: 850px;
 }

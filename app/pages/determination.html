@@ -4,31 +4,39 @@
                <span class="sr-only">Loading...</span>
          </div>
    </div>
-   <div class="interface position-relative bg-light" style="z-index: 1;">
-            <div class="container-fluid pt-xl-5">
-               <div class="row justify-content-center justify-content-lg-around">
-                  <div class="col-lg-3 col-xl-4 mt-2 pt-lg-1">
+   <div class="interface position-relative bg-light">
+            <div class="container pt-4 pt-xl-5">
+               <div class="row justify-content-center justify-content-lg-start">
+                  <div class="col-lg-10">
                      <h2>Определение возраста и пола</h2>
                      <p>Для начала процесса распознавания загрузите изображение c лицом человека, возраст, возрастную группу и пол которого вы хотите распознать, затем нажмите кнопку "Начать распознавание". После окончания распознавания результаты будут выведены в диалоговое окно</p>
                   </div>
-                  <div class="col-12 col-lg-3 col-xl-3 order-12 order-lg-1 pt-0 pt-lg-1 justify-content-lg-center results">
-                        <h5 style="text-align: center;">Результаты распознавания</h5>
-                        <ul class="list_results px-3 py-4 px-lg-5 py-lg-5 text-light">
-                            <li>Возраст: {{age}}</li>
-                            <li>Пол: {{gender}}</li>
-                            <li>Возрастная группа: {{age_group}} </li>
-                        </ul>
+               </div>
+               <div class="row justify-content-center justify-content-lg-around">
+                  <div class="col-12 col-lg-3 col-xl-3 order-12 order-lg-1 pt-0 pt-lg-1 results">
+                        <div class="d-flex row justify-content-center justify-content-lg-center">
+                           <h5>Результаты распознавания</h5> 
+                        </div>
+                        <div class="d-flex row justify-content-center justify-content-lg-center">
+                           <ul class="d-flex flex-column list_results px-3 py-4 text-light justify-content-center justify-content-lg-center">
+                              <li>Возраст: {{age}}</li>
+                              <li>Пол: {{gender}}</li>
+                              <li>Возрастная группа: {{age_group}} </li>
+                           </ul>
+                        </div>
                   </div>
-                  <div class="col-12 col-lg-7 col-xl-5 order-1 order-lg-12">
-                     <div class="d-flex photo_window justify-content-center justify-content-lg-center overflow-hidden position-relative">
-                        <img class="p-2" id="selected-image" src="#" alt="" style="height: 100%;">
+                  <div class="col-12 col-lg-8 col-xl-8 order-1 order-lg-12 justify-content-lg-center">
+                     <div class="d-flex row justify-content-center justify-content-lg-center">
+                        <div class="d-flex photo_window justify-content-center justify-content-lg-center">
+                           <img class="p-2" id="selected-image" src="#" alt="" style="height: 100%">
+                        </div>
                      </div>
-                     <div class="container-fluid">
-                        <div class="row justify-content-center justify-content-lg-center align-items-lg-center pt-2 pt-xl-2">
-                           <div class="col-xl-0 justify-content-center mx-lg-3">
-                              <button class="p-2 btn btn-primary" type="button" ng-click="determ()">Начать распознавание</button>
-                           </div>
-                           <div class="col-xl-6 custom-fie mt-2 mt-lg-0 mx-lg-3">
+                     <div class="row justify-content-center justify-content-lg-center align-items-lg-center mt-2 mt-lg-2">
+                        <div class="d-flex col-8 col-lg-4 pb-2 pb-lg-0 justify-content-center justify-content-lg-start">
+                           <button class="p-2 btn btn-primary" type="button" ng-click="determ()">Начать распознавание</button>
+                        </div>
+                        <div class="col-10 col-lg-4">
+                           <div class="custom-fie mt-2 mt-lg-0 mx-lg-3">
                               <input type="file" accept="image/jpeg,image/png" class="custom-file-input" id="input-file" onchange="angular.element(this).scope().readURL(this)">
                               <label class="custom-file-label" for="input-file">Выберите фотографию</label>
                            </div>

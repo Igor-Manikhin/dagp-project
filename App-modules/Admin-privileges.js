@@ -1,4 +1,5 @@
 const { validationResult } = require('express-validator/check');
+const email      = require('./email-send');
 const moment     = require('moment');
 const jwt        = require('jsonwebtoken');
 const pg         = require('pg');
@@ -38,7 +39,15 @@ module.exports.changeUserPassword = function(req, res){
 				if(err){
 					return console.log("Bad request!");
 				}
-				done();
+				client.query("SELECT email FROM users WHERE username=$1", [body.username], function(err, result){
+					if(err){
+						return console.log("Bad request!");
+					}
+					done();
+					var send_mail = new email(result.rows[0].email);
+					send_mail.Send_Mail_About_Change_Password(body.password);
+					res.send({answer: true});
+				})
 			})
 		})
 	})

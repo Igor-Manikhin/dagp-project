@@ -31,7 +31,7 @@
 							<div class="d-flex flex-column col-12 col-lg-4 mr-lg-3">
 								<div class="card px-lg-2 pt-2">
 									<div class="d-flex justify-content-center">
-										<img class="card-img-top" ng-src="{{photoURL}}" alt="Avatar" width="250" height="250">
+										<img class="card-img-top" ng-src="http://localhost:3000/{{photoURL}}" alt="Avatar" width="250" height="250">
 									</div>
   									<div class="card-body">
 										<a class="btn btn-primary d-block text-light" data-toggle="modal" data-target="#exampleModal">Редактировать</a>
@@ -94,7 +94,7 @@
 										<tr>
 										   <th style="text-align: center;">{{$index + 1}}</th>
 										   <td>
-										   	 <div class="d-flex justify-content-lg-center text-center text-lg-left">
+										   	 <div class="d-flex justify-content-lg-center text-center text-lg-left info_determ">
 										   	 	Возраст: {{history_id.age_determ}} лет<br>
 										   	  	Пол: {{history_id.gender_determ}}<br>
 										   	  	Возрастная группа: {{history_id.age_group_determ}}
@@ -102,7 +102,7 @@
 										   </td>
 										   <td>
 										   	 <div class="d-flex justify-content-center justify-content-lg-center">
-										   	 	<img class="images_history" ng-src="{{history_id.photo_used_determ}}" alt="" width="150" height="150">
+										   	 	<img class="images_history" ng-src="http://localhost:3000/{{history_id.photo_used_determ}}" alt="" width="150" height="150">
 										   	 </div>
 										   </td>
 										</tr>

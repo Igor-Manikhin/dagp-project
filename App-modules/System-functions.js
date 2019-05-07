@@ -85,8 +85,8 @@ module.exports.support = function(req, res){
 					return console.log("Bad request!");
 				}
 				if(result.rows.length > 0){
-					var send_emails = new email(body.username, body.email, body.type_problem, body.description_problem);
-					send_emails.sendMails();
+					var send_emails = new email(body.email);
+					send_emails.send_Mails_To_Support_And_User(body.username, body.type_problem, body.description_problem);
 
 					client.query("UPDATE statistics_of_functional_use SET count_tech_support_calls=count_tech_support_calls+1 WHERE user_id=$1", [result.rows[0].id], 
 					function(err, result){

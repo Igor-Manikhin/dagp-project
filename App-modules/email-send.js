@@ -6,7 +6,7 @@ var transporter = nodemailer.createTransport({
 		secure: true,
   		auth: {
     		user: 'support@dagp.ru',
-    		pass: 'Cronos1123'
+    		pass: 'Al2805197103041970'
   		}
 });
 
@@ -15,35 +15,46 @@ transporter.use('compile', hbs({
     viewPath: 'app/views_mail'
 }));
 
-function Email(username, email, type_problem, description_problem){
-	this.username = username;
+function Mails(email){ 
 	this.email = email;
-	this.type_problem = type_problem;
-	this.description_problem = description_problem;
-
-	this.sendMails = function(){
+	
+	this.send_Mails_To_Support_And_User = function(username, type_problem, description_problem){
 		var mailToUser = {
   			from: 'support@dagp.ru',
   			to: this.email,
-  			subject: 'Фиксация проблемы веб-сервиса' + " <"+this.type_problem+">",
-  			template: 'index',
+  			subject: 'Фиксация проблемы веб-сервиса' + " <"+type_problem+">",
+  			template: 'support',
   			context: {
-  				username: this.username
+  				username: username
   			}
 		};
 
 		var mailToAdmin = {
 			from: 'support@dagp.ru',
 			to: 'i.manihin@dagp.ru',
-			subject: 'Фиксация проблемы веб-сервиса' + " <"+this.type_problem+">",
-			html: 'Пользователь '+this.username+' обнаружил проблему в работоспособности веб-сервиса, связанную с '+
-			'\"'+this.type_problem+'\".'+'<br><br>'+'Ниже привидено описание проблемы:'+'<br>'+this.description_problem
+			subject: 'Фиксация проблемы веб-сервиса' + " <"+type_problem+">",
+			html: 'Пользователь '+username+' обнаружил проблему в работоспособности веб-сервиса, связанную с '+
+			'\"'+type_problem+'\".'+'<br><br>'+'Ниже привидено описание проблемы:'+'<br>'+description_problem
 		};
 
 		transporter.sendMail(mailToUser);
 		transporter.sendMail(mailToAdmin);
 	}
 
+	this.Send_Mail_About_Change_Password = function(password){
+		var mailToUser = {
+  			from: 'support@dagp.ru',
+  			to: this.email,
+  			subject: 'Изменение пароля от личного аккаунта',
+  			template: 'changePassword',
+  			context: {
+  				password: password
+  			}
+		};
+
+		transporter.sendMail(mailToUser);
+	}
+
 }
 
-module.exports = Email; 
+module.exports = Mails;

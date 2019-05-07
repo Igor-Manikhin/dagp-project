@@ -52,7 +52,15 @@
    .account{
       min-height: 900px;
    }
+
+   .nav-acc{
+      width: 100%;
+   }
   
+   .info_determ{
+      font-size: 13px;
+   }
+   
    .card-img-top{
       height: 200px;
       width: 200px;

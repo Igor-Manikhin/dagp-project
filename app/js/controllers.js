@@ -502,6 +502,7 @@ myApp.controller("supportController", function($scope, $http){
 myApp.controller("determinationController", function($scope, $timeout, $http, user){
 
     var spinner = angular.element(document.querySelector(".loading"));
+    var message_error = angular.element(document.querySelector(".message_error"));
     var photoURL;
     var type_file;
     var name_file;
@@ -545,18 +546,12 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
             }
         }
 
-        var class_names = ["Женский", "Мужской"];
-        let ages = tf.range(0, 117);
-        var res_determ = {};
-        let prediction_age;
-        let prediction_gender;
-        var pred_data = {};
         $scope.age =""; 
         $scope.gender = "";
         $scope.age_group = "";
         
+        message_error.addClass("d-none");
         let image = $("#selected-image").get(0);
-
         var tracker = new tracking.ObjectTracker("face");
         tracker.setInitialScale(1.03);
         tracker.setStepSize(1.9);
@@ -564,6 +559,12 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
 
         tracker.on('track', function(event){
             if(event.data.length != 0){
+            	var class_names = ["Женский", "Мужской"];
+        		let ages = tf.range(0, 117);
+        		let prediction_age;
+        		let prediction_gender;
+        		var res_determ = {};
+        		var pred_data = {};
                 let tensor = tf.browser.fromPixels(image)
                       .resizeNearestNeighbor([150,150])   
                       .toFloat()
@@ -592,6 +593,10 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
                     spinner.removeClass("d-flex").addClass("d-none");
                 }, 1500);      
 
+            }
+            else{
+            	message_error.removeClass("d-none");
+            	spinner.removeClass("d-flex").addClass("d-none");
             }
          });
          spinner.removeClass("d-none").addClass("d-flex");

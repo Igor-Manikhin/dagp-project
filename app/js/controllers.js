@@ -498,7 +498,7 @@ myApp.controller("supportController", function($scope, $http){
         })
     }
 });
-
+//Контроллер страницы определения возраста, возрастной группы и пола человека по изображению лица 
 myApp.controller("determinationController", function($scope, $timeout, $http, user){
 
     var spinner = angular.element(document.querySelector(".loading"));

@@ -502,13 +502,16 @@ myApp.controller("supportController", function($scope, $http){
 myApp.controller("determinationController", function($scope, $timeout, $http, user){
 
     var spinner = angular.element(document.querySelector(".loading"));
+    var message_error = angular.element(document.querySelector(".message_error"));
     var photoURL;
     var type_file;
     var name_file;
 
-    let model;
+    let model_age;
+    let model_gender;
     (async function(){
-            model = await tf.loadLayersModel('backend/neural_network/model.json');
+            model_age = await tf.loadLayersModel('backend/neural_network_age/model.json');
+            model_gender = await tf.loadLayersModel('backend/neural_network_gender/model.json');
     })();
 
 
@@ -530,7 +533,7 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
 
         function age_group(age){
             
-            var groups = ["Детская", "Подростковая", "Юношеская", "Взрослая", "Пожилая"];
+            var groups = ["Детская", "Подростковая", "Юношеская", "Взрослая","Зрелая", "Пожилая"];
             var ages_groups = [[0, 12],[13, 18],[19, 25],[26, 40], [41, 55], [56, 75]]; 
             var group_age;
 
@@ -543,17 +546,12 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
             }
         }
 
-        var class_names = ["Женский", "Мужской"];
-        var res_determ = {};
-        var age_group;
-        let prediction;
-
         $scope.age =""; 
         $scope.gender = "";
         $scope.age_group = "";
         
+        message_error.addClass("d-none");
         let image = $("#selected-image").get(0);
-
         var tracker = new tracking.ObjectTracker("face");
         tracker.setInitialScale(1.03);
         tracker.setStepSize(1.9);
@@ -561,35 +559,47 @@ myApp.controller("determinationController", function($scope, $timeout, $http, us
 
         tracker.on('track', function(event){
             if(event.data.length != 0){
-                spinner.removeClass("d-none").addClass("d-flex");
+                var class_names = ["Женский", "Мужской"];
+                let ages = tf.range(0, 117);
+                let prediction_age;
+                let prediction_gender;
+                var res_determ = {};
+                var pred_data = {};
                 let tensor = tf.browser.fromPixels(image)
                       .resizeNearestNeighbor([150,150])   
                       .toFloat()
                       .expandDims();
-                tensor = tensor.div(tf.scalar(255));        
-                prediction = model.predict(tensor);
-                prediction = class_names[prediction.argMax(1).dataSync()[0]];        
-                age_group = age_group(18);
-
+                tensor = tensor.div(tf.scalar(255));
+                prediction_age = model_age.predict(tensor);
+                prediction_age = prediction_age.dot(ages).flatten();
+                prediction_age.data().then(X => {pred_data.age = parseFloat(X[0].toFixed())
+                                                 pred_data.age_group = age_group(pred_data['age']);
+                });        
+                prediction_gender = model_gender.predict(tensor);
+                prediction_gender.argMax(1).data().then(X => pred_data.gender = class_names[X]);
                 $timeout(function(){
-                    $scope.age = 18+" лет"; 
-                    $scope.gender = prediction;
-                    $scope.age_group = age_group;
+                    res_determ.id = user.getIdCurrentUser();
+                    res_determ.age_determ = pred_data['age'];
+                    res_determ.age_group_determ = pred_data['age_group'];
+                    res_determ.gender_determ = pred_data['gender'];
+                    res_determ.photoURL = photoURL;
+                    res_determ.type_file = type_file;
+                    res_determ.name_file = name_file;
+                    $http.post("http://localhost:3000/saveDataHistory", res_determ);
+                    
+                    $scope.age = pred_data['age']+" лет"; 
+                    $scope.gender = pred_data['gender'];
+                    $scope.age_group = pred_data['age_group'];
                     spinner.removeClass("d-flex").addClass("d-none");
                 }, 1500);      
 
-                res_determ.id = user.getIdCurrentUser();
-                res_determ.age_determ = 18;
-                res_determ.age_group_determ = age_group;
-                res_determ.gender_determ = prediction;
-                res_determ.photoURL = photoURL;
-                res_determ.type_file = type_file;
-                res_determ.name_file = name_file;
-
-                $http.post("http://localhost:3000/saveDataHistory", res_determ);
+            }
+            else{
+                message_error.removeClass("d-none");
+                spinner.removeClass("d-flex").addClass("d-none");
             }
          });
-
+         spinner.removeClass("d-none").addClass("d-flex");
          tracking.track(image, tracker); 
     } 
 });

@@ -125,6 +125,7 @@ module.exports.updateUserInfo = function(req, res){
 						return console.log("Bad request!");
 					}
 					done();
+					res.send({update: true, message: "Информация об пользователе успешно изменена"});
 				})
 			})
 		})
@@ -161,6 +162,7 @@ module.exports.changeEmail = function(req, res){
 						return console.log("Bad request!");
 					}
 					done();
+					res.send({update: true, message: "адрес электронной почты успешно изменён"});
 				})
 			})
 		})
@@ -191,6 +193,7 @@ module.exports.changePassword = function(req, res){
 					return console.log("Bad request!");
 				}
 				done();
+				res.send({update: true, message: "пароль от личного аккаунта успешно изменён"});
 			})
 		})
   	})

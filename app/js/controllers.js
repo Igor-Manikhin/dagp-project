@@ -74,8 +74,8 @@ myApp.controller("mainController", function($scope){
 });
 
 myApp.controller("registrController", function($scope, $location, $http){
-    var path;
-    var type_file;
+    var path; //Путь, по которому расположена фотография в формате Base64 
+    var type_file; //Формат фотографии
     $scope.message = false;
 
     $scope.input_check = function(event){
@@ -100,24 +100,27 @@ myApp.controller("registrController", function($scope, $location, $http){
 
     $scope.registr = function(event){
         
-        var data = {};
-        data.username = $scope.username;
-        data.email    = $scope.email;
-        data.photoURL = path;
-        data.type_file= type_file;
-        data.date     = $scope.date;   
-        data.city     = $scope.city;
-        data.password = $scope.password;
+        var data = {}; //Объект хранения данных, указанных пользователем при регистрации нового аккаунта
+        data.username = $scope.username; //Занесение имени пользователя, указанного при регистрации нового аккаунта, в объект "data"
+        data.email    = $scope.email; //Занесение адреса электронной почты, указанной при регистрации нового аккаунта, в объект "data"
+        data.photoURL = path; //Занесение пути указанной фотографии во время регистрации нового аккаунта, в объекта "data"
+        data.type_file= type_file; //Занесение формата фотографии, указанной во время регистрации нового аккаунта, в объекта "data"
+        data.date     = $scope.date; //Занесение даты рождения, указанной во время регистрации нового аккаунта, в объекта "data"
+        data.city     = $scope.city; //Занесение города проживания пользователя, указанного во время регистрации нового аккаунта, в объекта "data"
+        data.password = $scope.password; //Занесение пароля от личного аккаунта, указанного во время регистрации нового аккаунта, в объекта "data"
 
         form.classList.remove("was-validated");
         $http.post("http://localhost:3000/registration", data).then(function Success(result) {
+            //Если пришёл ответ с сервера со значением "true"
             if(result.data.reg){
+                //Вывести сообщение об успешной регистрации нового аккаунта на веб-сервисе
                 $scope.message = true;
-            }    
+            }
+        //В случае неправильного заполнения данных при регистрации нового аккаунта на веб-сервисе    
         }, function Error(result){
-            var errors = result.data.errors;
+            var errors = result.data.errors; //Ошибки, полученные в виде ответа с сервера об не успешной регистрации нового аккаунта
             console.log(result.data.errors);
-
+            //Выделить поля, в которых были допущены ошибки или которые не были заполнены как обязательные
             for(property in errors){
                 if(errors[property]){
                     angular.element(document.querySelector('#'+property)).addClass('is-invalid');
@@ -401,6 +404,7 @@ myApp.controller("changeDataController", function($scope, $http, user){
     $scope.input_check = function(event){
         if($(event.target).value != ""){
             $(event.target).removeClass('is-invalid');
+            $scope.update_user_info = false;
         }
     }
 
@@ -420,12 +424,15 @@ myApp.controller("changeDataController", function($scope, $http, user){
                 $scope.date_birth = new Date(result.data.date_birth);
                 $scope.city = result.data.city;
             });
+            $scope.update_user_info = false; 
         }
         if(arg == 2){
             $scope.email = "";
+            $scope.update_user_info = false;
         }
         if(arg == 3){
             $scope.password = "";
+            $scope.update_user_info = false;
         }
 
         $scope.link = 0;
@@ -448,7 +455,8 @@ myApp.controller("changeDataController", function($scope, $http, user){
         }
 
         $http.put("http://localhost:3000/account" + url, data).then(function(result){
-
+            $scope.update_user_info = result.data.update;
+            $scope.message = result.data.message;
         }, function(result){
             var errors = result.data.errors;
 

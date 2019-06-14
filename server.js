@@ -23,7 +23,7 @@ app.use(bodyParser.json({limit: "100mb", type:'application/json'}));
 app.use(bodyParser.urlencoded({limit: "100mb", extended: true, type:'application/json'}));
 
 
-
+//Маршруты  
 app.get('/getListUsers/:id', AdminPrivileges.getListUsers)
 app.get('/check/:id', System.check);
 app.get('/getUserInfo/:id', accountSettings.getUserInfo);

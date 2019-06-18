@@ -45,7 +45,7 @@ app.use(bodyParser.urlencoded({limit: "100mb", extended: true, type:'application
 function age_group(age){
             
     var groups = ["Детская", "Подростковая", "Юношеская", "Взрослая","Зрелая", "Пожилая"];
-    var ages_groups = [[0, 12],[13, 18],[19, 25],[26, 40], [41, 55], [56, 75]]; 
+    var ages_groups = [[0, 12],[13, 18],[19, 25],[26, 40], [41, 55], [56, 100]]; 
     var group_age;
 
     for(var i = 0; i < ages_groups.length; i++){

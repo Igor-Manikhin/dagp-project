@@ -271,6 +271,7 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
     $scope.input_check = function(event){
         if($(event.target).value != ""){
             $(event.target).removeClass('is-invalid');
+            $scope.update_user_info = false;
         }
     }
 
@@ -286,7 +287,8 @@ myApp.controller("changePasswordsUsers", function($scope, $http, user){
         data.password = $scope.newUserPassword;
 
         $http.put("http://localhost:3000/changeUserPassword", data).then(function(result){
-
+            $scope.update_user_info = result.data.answer;
+            $scope.message = result.data.message;
         }, function(result){
             var errors = result.data.errors;
             for(error in errors){
@@ -509,107 +511,61 @@ myApp.controller("supportController", function($scope, $http){
 //Контроллер страницы определения возраста, возрастной группы и пола человека по изображению лица 
 myApp.controller("determinationController", function($scope, $timeout, $http, user){
 
-    var spinner = angular.element(document.querySelector(".loading"));
-    var message_error = angular.element(document.querySelector(".message_error"));
-    var photoURL;
-    var type_file;
+    var spinner = angular.element(document.querySelector(".loading")); 
+    var message_error = angular.element(document.querySelector(".message_error")); 
+    var data_image = {}; 
+    var photoURL; 
+    var type_file; 
     var name_file;
 
-    let model_age;
-    let model_gender;
-    (async function(){
-            model_age = await tf.loadLayersModel('backend/neural_network_age/model.json');
-            model_gender = await tf.loadLayersModel('backend/neural_network_gender/model.json');
-    })();
+    $scope.readURL = function(input) { 
+        if (input.files && input.files[0]) { 
+            var reader = new FileReader(); 
+            reader.onload = function (e) { 
+                $('#selected-image').attr('src', e.target.result); 
+                photoURL = e.target.result; 
+                type_file = input.files[0].type; 
+                name_file = input.files[0].name; 
+            } 
 
+            reader.readAsDataURL(input.files[0]); 
+        } 
+    }; 
 
-    $scope.readURL = function(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#selected-image').attr('src', e.target.result);
-                photoURL = e.target.result;
-                type_file = input.files[0].type;
-                name_file = input.files[0].name;
-            }
-            
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
-
-    $scope.determ = async function(){
-
-        function age_group(age){
-            
-            var groups = ["Детская", "Подростковая", "Юношеская", "Взрослая","Зрелая", "Пожилая"];
-            var ages_groups = [[0, 12],[13, 18],[19, 25],[26, 40], [41, 55], [56, 75]]; 
-            var group_age;
-
-            for(var i = 0; i < ages_groups.length; i++){
-                var j = 0;
-                if(age>=ages_groups[i][j] && age<=ages_groups[i][j+1]){
-                    group_age = groups[i];
-                    return group_age;
-                }
-            }
-        }
+    $scope.determ = async function(){ 
 
         $scope.age =""; 
-        $scope.gender = "";
-        $scope.age_group = "";
-        
-        message_error.addClass("d-none");
-        let image = $("#selected-image").get(0);
-        var tracker = new tracking.ObjectTracker("face");
-        tracker.setInitialScale(1.03);
-        tracker.setStepSize(1.9);
-        tracker.setEdgesDensity (0,2);
+        $scope.gender = ""; 
+        $scope.age_group = ""; 
 
-        tracker.on('track', function(event){
-            if(event.data.length != 0){
-                var class_names = ["Женский", "Мужской"];
-                let ages = tf.range(0, 117);
-                let prediction_age;
-                let prediction_gender;
-                var res_determ = {};
-                var pred_data = {};
-                let tensor = tf.browser.fromPixels(image)
-                      .resizeNearestNeighbor([150,150])   
-                      .toFloat()
-                      .expandDims();
-                tensor = tensor.div(tf.scalar(255));
-                prediction_age = model_age.predict(tensor);
-                prediction_age = prediction_age.dot(ages).flatten();
-                prediction_age.data().then(X => {pred_data.age = parseFloat(X[0].toFixed())
-                                                 pred_data.age_group = age_group(pred_data['age']);
-                });        
-                prediction_gender = model_gender.predict(tensor);
-                prediction_gender.argMax(1).data().then(X => pred_data.gender = class_names[X]);
-                $timeout(function(){
-                    res_determ.id = user.getIdCurrentUser();
-                    res_determ.age_determ = pred_data['age'];
-                    res_determ.age_group_determ = pred_data['age_group'];
-                    res_determ.gender_determ = pred_data['gender'];
-                    res_determ.photoURL = photoURL;
-                    res_determ.type_file = type_file;
-                    res_determ.name_file = name_file;
-                    $http.post("http://localhost:3000/saveDataHistory", res_determ);
-                    
-                    $scope.age = pred_data['age']+" лет"; 
-                    $scope.gender = pred_data['gender'];
-                    $scope.age_group = pred_data['age_group'];
-                    spinner.removeClass("d-flex").addClass("d-none");
-                }, 1500);      
+        message_error.addClass("d-none"); 
+        let image = $("#selected-image").get(0); 
+        var tracker = new tracking.ObjectTracker("face"); 
+        tracker.setInitialScale(1.03); 
+        tracker.setStepSize(1.9); 
+        tracker.setEdgesDensity (0,2); 
 
-            }
-            else{
-                message_error.removeClass("d-none");
-                spinner.removeClass("d-flex").addClass("d-none");
-            }
-         });
-         spinner.removeClass("d-none").addClass("d-flex");
-         tracking.track(image, tracker); 
-    } 
+        tracker.on('track', function(event){ 
+            if(event.data.length != 0){ 
+                data_image.id = user.getIdCurrentUser();
+                data_image.photoURL = photoURL; 
+                data_image.type_file = type_file; 
+                data_image.name_file = name_file;
+                $http.post("http://localhost:3000/determination", data_image).then(function(result){ 
+                    $scope.age = result.data.age+" лет"; 
+                    $scope.gender = result.data.gender; 
+                    $scope.age_group = result.data.age_group;  
+                    spinner.removeClass("d-flex").addClass("d-none"); 
+                });  
+            } 
+            else{ 
+                message_error.removeClass("d-none"); 
+                spinner.removeClass("d-flex").addClass("d-none"); 
+            } 
+        }); 
+        spinner.removeClass("d-none").addClass("d-flex");   
+        tracking.track(image, tracker); 
+    }
 });
 
 

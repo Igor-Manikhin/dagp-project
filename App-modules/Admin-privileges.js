@@ -46,7 +46,7 @@ module.exports.changeUserPassword = function(req, res){
 					done();
 					var send_mail = new email(result.rows[0].email);
 					send_mail.Send_Mail_About_Change_Password(body.password);
-					res.send({answer: true});
+					res.send({answer: true, message: "Пароль от личного аккаунта выбранного пользователя успешно изменён"});
 				})
 			})
 		})

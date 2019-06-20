@@ -52,6 +52,22 @@ main div.main{
 	transform: scale(1.2);
 }
 
+
+@media (max-width: 1366px){
+	.datasets_info{
+		font-size: 18px;
+	}
+
+	#text_about{
+		font-size: 18px;
+	}
+
+	#robo{
+		max-width: 80%;
+		max-height: 80%;
+	}
+}
+
 @media (max-width: 450px){
 	.datasets_info{
 		font-size: 16px;
@@ -60,5 +76,10 @@ main div.main{
 	#text_about{
 		font-size: 16px;
 	}
-    
+
+	#robo{
+		max-width: 100%;
+		max-height: 100%;
+	}
+
 }

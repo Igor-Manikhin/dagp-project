@@ -412,6 +412,7 @@ myApp.controller("changeDataController", function($scope, $http, user){
 
     $scope.showBlock = function(arg){
         $scope.link = arg;
+        $scope.update_user_info = false;
     }
 
     $scope.hideBlock = function(arg){
